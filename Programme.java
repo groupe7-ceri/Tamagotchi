@@ -12,8 +12,7 @@ public class Programme
 		System.out.println("Elodie Boloré - Jérémie Décome - Thibaut Miranda");
 		System.out.println("Version : 0.1");
 		System.out.println("Démarrage de l'application ...");
-		JFrame fenetre = new JFrame();
-		fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
-		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
+		Interface fenetre = new Interface(400, 300);
+		fenetre.majEtat("faim", 80);
 	}
 }
