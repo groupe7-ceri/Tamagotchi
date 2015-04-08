@@ -36,19 +36,13 @@ public class Interface extends JFrame
 
 		// Textes résumé haut
 		JLabel nom = new JLabel("Nom :");
-		panNom.add(nom);
 		JLabel type = new JLabel("Type :");
-		panType.add(type);
 		JLabel humeur = new JLabel("Humeur :");
-		panHumeur.add(humeur);
 		JLabel lieu = new JLabel("Lieu :");
-		panLieu.add(lieu);
 		JLabel lastMAJ = new JLabel("Dernière MAJ :");
-		panLastMAJ.add(lastMAJ);
 		JLabel nextMAJ = new JLabel("Prochaine MAJ :");
-		panNextMAJ.add(nextMAJ);
-
-		// Boutons
+		
+		// Boutons (panel raccourci action et boutons divers)
 		JButton btQuitter = new JButton("Quitter");
 		JButton btRefresh = new JButton("Rafraichir");
 		JButton btConfig = new JButton("Config");
@@ -59,45 +53,68 @@ public class Interface extends JFrame
 		JButton btWC = new JButton("Toilettes");
 		JButton btMoral = new JButton("S'amuser avec");
 
-		// Barres de progression dans panBarre
+		// Barres de progression dans panBarre (et textes)
 		JProgressBar barreFaim = new JProgressBar();
 		JProgressBar barreEnergie = new JProgressBar();
 		JProgressBar barreHygiene = new JProgressBar();
 		JProgressBar barreWC = new JProgressBar();
 		JProgressBar barreMoral = new JProgressBar();
+		JLabel lbFaim = new JLabel("Nourriture");
+		JLabel lbEnergie = new JLabel("Energie");
+		JLabel lbHygiene = new JLabel("Hygiène");
+		JLabel lbWC = new JLabel("Toilettes");
+		JLabel lbMoral = new JLabel("Moral / Bonheur");
 
 		// Gestion de la liste déroulante action (les options varient en fonction du type de tamagotchi)
 		Choice selectActions = new Choice();
 		selectActions.addItem("Sélectionnez");
 		selectActions.addItem("Action 1");
 		selectActions.addItem("Action 2");
+		JButton btAction = new JButton("Effectuer");
 
 		// Image
 		Animation image = new Animation("pikachu.png", panImage.getWidth(), panImage.getHeight());
 		panImage = image.getPanel();
 
-		// On rempli la fenetre
+		// On rempli la fenetre (et configuration des layouts)
+		panNom.add(nom);
+		panType.add(type);
+		panHumeur.add(humeur);
+		panLieu.add(lieu);
+		panLastMAJ.add(lastMAJ);
+		panNextMAJ.add(nextMAJ);
+
 		panBoutons.add(btQuitter);
 		panBoutons.add(btRefresh);
 		panBoutons.add(btConfig);
 
-		panSelect.add(btAbout);
 		panSelect.add(selectActions);
+		panSelect.add(btAction);
+		panSelect.add(btAbout);
 
+		panBarre.setLayout(new BoxLayout(panBarre, BoxLayout.PAGE_AXIS));
+		panBarre.add(lbFaim);
 		panBarre.add(barreFaim);
-		panBarre.add(btManger);
+		panBarre.add(lbEnergie);
 		panBarre.add(barreEnergie);
-		panBarre.add(btDormir);
+		panBarre.add(lbHygiene);
 		panBarre.add(barreHygiene);
-		panBarre.add(btDouche);
+		panBarre.add(lbWC);
 		panBarre.add(barreWC);
-		panBarre.add(btWC);
+		panBarre.add(lbMoral);
 		panBarre.add(barreMoral);
-		panBarre.add(btMoral);
+
+		panShortActions.setLayout(new BoxLayout(panShortActions, BoxLayout.PAGE_AXIS));
+		panShortActions.add(btManger);
+		panShortActions.add(btDormir);
+		panShortActions.add(btDouche);
+		panShortActions.add(btWC);
+		panShortActions.add(btMoral);
 
 		// Placements des JPanel
 		this.principal = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.5;
 		c.gridx = 0;
@@ -165,20 +182,6 @@ public class Interface extends JFrame
 		this.principal.add(panSelect, c);
 		// Génération de la fenetre
 		this.fenetre.setContentPane(this.principal);
-		/*this.fenetre.setLayout(new GridLayout(5, 2));
-		this.fenetre.getContentPane().add(panNom);
-		this.fenetre.getContentPane().add(panType);
-		this.fenetre.getContentPane().add(panHumeur);
-		this.fenetre.getContentPane().add(panLieu);
-		this.fenetre.getContentPane().add(panLastMAJ);
-		this.fenetre.getContentPane().add(panNextMAJ);
-		this.fenetre.getContentPane().add(panImage);
-		this.fenetre.getContentPane().add(panBarre);
-		this.fenetre.getContentPane().add(panShortActions);
-		this.fenetre.getContentPane().add(panBoutons);
-		this.fenetre.getContentPane().add(panSelect);//*/
-
-		// Rafraichissement de l'interface
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
 	}
 	private void configFenetre()

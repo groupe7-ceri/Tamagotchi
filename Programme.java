@@ -9,9 +9,9 @@ public class Programme
 	{
 		System.out.println("Projet Tamagotchi - Modélisation UML");
 		System.out.println("Elodie Boloré - Jérémie Décome - Thibaut Miranda");
-		System.out.println("Version : 0.1");
+		System.out.println("Version : 0.1.2");
 		System.out.println("Démarrage de l'application ...");
-		Interface fenetre = new Interface(900, 600);
+		Interface fenetre = new Interface(800, 300);
 		fenetre.majEtat("faim", 80);
 	}
 }
