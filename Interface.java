@@ -1,13 +1,11 @@
 /* Fichier Interface.java
 Description du fichier
 Crée le 02/04/2015
-MAJ : 03/04/2015 */
+MAJ : 06/04/2015 */
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
+import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class Interface extends JFrame
 {
@@ -26,65 +24,88 @@ public class Interface extends JFrame
 		this.fenetre.setTitle("Tamagotchi");
 		this.fenetre.setSize(this.x, this.y);
 		this.fenetre.setLocationRelativeTo(null);
+		this.fenetre.setResizable(false);
 		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
+		
 		// Définition des conteneurs
-		JPanel ligneNom = new JPanel();			// Ligne 1 - Haut affichage des informations 1 (nom et type)
-		ligneNom.setBackground(Color.red);
-		ligneNom.setPreferredSize(new Dimension(60, 40));
-		JPanel ligneHumeur = new JPanel();		// Ligne 2 - Haut affichage des informations 2 (Humeur et lieu)
-		ligneHumeur.setBackground(Color.green);
-		ligneHumeur.setPreferredSize(new Dimension(60, 40));
-		JPanel ligneMAJ = new JPanel();			// Ligne 3 - Haut affichage des informations 3 (Dernière et prochaine MAJ)
-		ligneHumeur.setBackground(Color.BLUE);
-		ligneHumeur.setPreferredSize(new Dimension(60, 40));
-		JPanel ligneCentre = new JPanel();		// Ligne 4 - Image tamagotchi et barre de progression état
-		ligneHumeur.setBackground(Color.black);
-		ligneHumeur.setPreferredSize(new Dimension(60, 40));
-		JPanel ligneBas = new JPanel();			// Ligne 5 - Bas Boutons et sélecteur actions
-		ligneBas.setBackground(Color.YELLOW);
-		ligneBas.setPreferredSize(new Dimension(60, 40));
-		JPanel content = new JPanel();			// Conteneur principal
-		content.setPreferredSize(new Dimension(this.x, this.y));
-		content.setBackground(Color.WHITE);
-		content.setLayout(new GridBagLayout());	// layout manager
-		GridBagConstraints c = new GridBagConstraints();
-		// La ligne nom est sur la première ligne (x = 0, y = )
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridheight = 1;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		content.add(ligneNom, c);
-		c.gridy = 1;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		content.add(ligneHumeur, c);
-		c.gridy = 2;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		content.add(ligneMAJ, c);
-		c.gridy = 3;
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		content.add(ligneCentre, c);
-		c.gridy = 4;
-		content.add(ligneBas, c);
-		// La ligne humeur est sur la deuxième ligne
-
-		// La ligne MAJ est sur la troisième ligne
-
-		// La ligne Centre est sur la quatrième ligne
-
-		// La ligne Bas est sur la cinquième ligne
-
+		JPanel panNom = new JPanel();
+		JPanel panType = new JPanel();
+		JPanel panHumeur = new JPanel();
+		JPanel panLieu = new JPanel();
+		JPanel panLastMAJ = new JPanel();
+		JPanel panNextMAJ = new JPanel();
+		JPanel panImage = new JPanel();
+		JPanel panBarre = new JPanel();
+		JPanel panShortActions = new JPanel();
+		JPanel panBoutons = new JPanel();
+		JPanel panSelect = new JPanel();
 		// Textes résumé haut
+		JLabel nom = new JLabel("Nom :");
+		panNom.add(nom);
+		JLabel type = new JLabel("Type :");
+		panType.add(type);
+		JLabel humeur = new JLabel("Humeur :");
+		panHumeur.add(humeur);
+		JLabel lieu = new JLabel("Lieu :");
+		panLieu.add(lieu);
+		JLabel lastMAJ = new JLabel("Dernière MAJ :");
+		panLastMAJ.add(lastMAJ);
+		JLabel nextMAJ = new JLabel("Prochaine MAJ :");
+		panNextMAJ.add(nextMAJ);
 		// Boutons
-		JButton bQuitter = new JButton("Quitter");
-		JButton bRefresh = new JButton("Rafraichir");
-		JButton bConfig = new JButton("Config");
-		JButton bAbout = new JButton("A propos");
-		// Barre de progression
-
-		// Liste déroulante action
-
+		JButton bQuitter = new JButton("Quitter");		// panBoutons
+		JButton bRefresh = new JButton("Rafraichir");	// panBoutons
+		JButton bConfig = new JButton("Config");		// panBoutons
+		JButton bAbout = new JButton("A propos");		// panSelect
+		JButton bManger = new JButton("Manger");		// panShortActions
+		JButton bDormir = new JButton("Dormir");		// panShortActions
+		JButton bDouche = new JButton("Douche");		// panShortActions
+		JButton bWC = new JButton("Toilettes");			// panShortActions
+		JButton bMoral = new JButton("S'amuser avec");	// panShortActions
+		// Barres de progression dans panBarre
+		JProgressBar barreFaim = new JProgressBar();
+		JProgressBar barreEnergie = new JProgressBar();
+		JProgressBar barreHygiene = new JProgressBar();
+		JProgressBar barreWC = new JProgressBar();
+		JProgressBar barreMoral = new JProgressBar();
+		// Gestion de la liste déroulante action (en fonction du type de tamagotchi)
+		Choice selectActions = new Choice();
+		selectActions.addItem("Sélectionnez");
+		selectActions.addItem("Action 1");
+		selectActions.addItem("Action 2");
+		// Image
+		Animation image = new Animation("pikachu.png", panImage.getWidth(), panImage.getHeight());
+		panImage = image.getPanel();
+		// On rempli la fenetre
+		panNom.add(bQuitter);
+		panNom.add(bRefresh);
+		panNom.add(bConfig);
+		panSelect.add(bAbout);
+		panSelect.add(selectActions);
+		
+		panBarre.add(barreFaim);
+		panBarre.add(bManger);
+		panBarre.add(barreEnergie);
+		panBarre.add(bDormir);
+		panBarre.add(barreHygiene);
+		panBarre.add(bDouche);
+		panBarre.add(barreWC);
+		panBarre.add(bWC);
+		panBarre.add(barreMoral);
+		panBarre.add(bMoral);
+		this.fenetre.setLayout(new GridLayout(5, 2));
+		this.fenetre.getContentPane().add(panNom);
+		this.fenetre.getContentPane().add(panType);
+		this.fenetre.getContentPane().add(panHumeur);
+		this.fenetre.getContentPane().add(panLieu);
+		this.fenetre.getContentPane().add(panLastMAJ);
+		this.fenetre.getContentPane().add(panNextMAJ);
+		this.fenetre.getContentPane().add(panImage);
+		this.fenetre.getContentPane().add(panBarre);
+		this.fenetre.getContentPane().add(panShortActions);
+		this.fenetre.getContentPane().add(panNom);
+		this.fenetre.getContentPane().add(panSelect);
 		// Rafraichissement de l'interface
-		this.fenetre.setContentPane(content);
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
 	}
 	public void rafraichir()
