@@ -11,24 +11,18 @@ public class Interface extends JFrame
 {
 	private int x, y;			// taille de la fenetre
 	private JFrame fenetre;
-	private JPanel pan;
+	private JPanel principal;	// conteneur principal
 	public Interface(int x, int y)
 	{
 		System.out.println("Initialisation de l'interface graphique ...");
 		this.x = x;
 		this.y = y;
 		this.fenetre = new JFrame();
-		this.pan = new JPanel(new GridBagLayout());
+		this.configFenetre();
 
-		// Configuration de la fenetre
-		this.fenetre.setTitle("Tamagotchi");
-		this.fenetre.setSize(this.x, this.y);
-		this.fenetre.setLocationRelativeTo(null);
-		this.fenetre.setResizable(false);
-		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
-		
 		// Définition des conteneurs
 		JPanel panNom = new JPanel();
+		//panNom.setPreferredSize(new Dimension(60, 40));
 		JPanel panType = new JPanel();
 		JPanel panHumeur = new JPanel();
 		JPanel panLieu = new JPanel();
@@ -39,6 +33,7 @@ public class Interface extends JFrame
 		JPanel panShortActions = new JPanel();
 		JPanel panBoutons = new JPanel();
 		JPanel panSelect = new JPanel();
+
 		// Textes résumé haut
 		JLabel nom = new JLabel("Nom :");
 		panNom.add(nom);
@@ -52,48 +47,125 @@ public class Interface extends JFrame
 		panLastMAJ.add(lastMAJ);
 		JLabel nextMAJ = new JLabel("Prochaine MAJ :");
 		panNextMAJ.add(nextMAJ);
+
 		// Boutons
-		JButton bQuitter = new JButton("Quitter");		// panBoutons
-		JButton bRefresh = new JButton("Rafraichir");	// panBoutons
-		JButton bConfig = new JButton("Config");		// panBoutons
-		JButton bAbout = new JButton("A propos");		// panSelect
-		JButton bManger = new JButton("Manger");		// panShortActions
-		JButton bDormir = new JButton("Dormir");		// panShortActions
-		JButton bDouche = new JButton("Douche");		// panShortActions
-		JButton bWC = new JButton("Toilettes");			// panShortActions
-		JButton bMoral = new JButton("S'amuser avec");	// panShortActions
+		JButton btQuitter = new JButton("Quitter");
+		JButton btRefresh = new JButton("Rafraichir");
+		JButton btConfig = new JButton("Config");
+		JButton btAbout = new JButton("A propos");
+		JButton btManger = new JButton("Manger");
+		JButton btDormir = new JButton("Dormir");
+		JButton btDouche = new JButton("Douche");
+		JButton btWC = new JButton("Toilettes");
+		JButton btMoral = new JButton("S'amuser avec");
+
 		// Barres de progression dans panBarre
 		JProgressBar barreFaim = new JProgressBar();
 		JProgressBar barreEnergie = new JProgressBar();
 		JProgressBar barreHygiene = new JProgressBar();
 		JProgressBar barreWC = new JProgressBar();
 		JProgressBar barreMoral = new JProgressBar();
-		// Gestion de la liste déroulante action (en fonction du type de tamagotchi)
+
+		// Gestion de la liste déroulante action (les options varient en fonction du type de tamagotchi)
 		Choice selectActions = new Choice();
 		selectActions.addItem("Sélectionnez");
 		selectActions.addItem("Action 1");
 		selectActions.addItem("Action 2");
+
 		// Image
 		Animation image = new Animation("pikachu.png", panImage.getWidth(), panImage.getHeight());
 		panImage = image.getPanel();
+
 		// On rempli la fenetre
-		panNom.add(bQuitter);
-		panNom.add(bRefresh);
-		panNom.add(bConfig);
-		panSelect.add(bAbout);
+		panBoutons.add(btQuitter);
+		panBoutons.add(btRefresh);
+		panBoutons.add(btConfig);
+
+		panSelect.add(btAbout);
 		panSelect.add(selectActions);
-		
+
 		panBarre.add(barreFaim);
-		panBarre.add(bManger);
+		panBarre.add(btManger);
 		panBarre.add(barreEnergie);
-		panBarre.add(bDormir);
+		panBarre.add(btDormir);
 		panBarre.add(barreHygiene);
-		panBarre.add(bDouche);
+		panBarre.add(btDouche);
 		panBarre.add(barreWC);
-		panBarre.add(bWC);
+		panBarre.add(btWC);
 		panBarre.add(barreMoral);
-		panBarre.add(bMoral);
-		this.fenetre.setLayout(new GridLayout(5, 2));
+		panBarre.add(btMoral);
+
+		// Placements des JPanel
+		this.principal = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 0;
+		this.principal.add(panNom, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 1;
+		c.gridy = 0;
+		this.principal.add(panType, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 1;
+		this.principal.add(panHumeur, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 1;
+		c.gridy = 1;
+		this.principal.add(panLieu, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 2;
+		this.principal.add(panLastMAJ, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 1;
+		c.gridy = 2;
+		this.principal.add(panNextMAJ, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 3;
+		this.principal.add(panImage, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		c.gridx = 1;
+		c.gridy = 3;
+		this.principal.add(panBarre, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		c.gridx = 2;
+		c.gridy = 3;
+		this.principal.add(panShortActions, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		c.gridx = 0;
+		c.gridy = 4;
+		this.principal.add(panBoutons, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		c.gridx = 1;
+		c.gridy = 4;
+		this.principal.add(panSelect, c);
+		// Génération de la fenetre
+		this.fenetre.setContentPane(this.principal);
+		/*this.fenetre.setLayout(new GridLayout(5, 2));
 		this.fenetre.getContentPane().add(panNom);
 		this.fenetre.getContentPane().add(panType);
 		this.fenetre.getContentPane().add(panHumeur);
@@ -103,10 +175,20 @@ public class Interface extends JFrame
 		this.fenetre.getContentPane().add(panImage);
 		this.fenetre.getContentPane().add(panBarre);
 		this.fenetre.getContentPane().add(panShortActions);
-		this.fenetre.getContentPane().add(panNom);
-		this.fenetre.getContentPane().add(panSelect);
+		this.fenetre.getContentPane().add(panBoutons);
+		this.fenetre.getContentPane().add(panSelect);//*/
+
 		// Rafraichissement de l'interface
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
+	}
+	private void configFenetre()
+	{
+		// Configuration de la fenetre
+		this.fenetre.setTitle("Tamagotchi");
+		this.fenetre.setSize(this.x, this.y);
+		this.fenetre.setLocationRelativeTo(null);
+		this.fenetre.setResizable(false);
+		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
 	}
 	public void rafraichir()
 	{

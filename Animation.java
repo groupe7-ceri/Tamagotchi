@@ -1,9 +1,8 @@
 /* Fichier Animation.java
-Description du fichier
 Crée le mercredi 8 avril 2015
 MAJ : mercredi 8 avril 2015 
 
-Description : Gère l'ajout d'une image dans un JPanel (l'image est incluse dans le JPanel) */
+Description : Gère l'ajout d'une image et son changement dans un JPanel (l'image est incluse dans le JPanel) */
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +23,7 @@ public class Animation extends JFrame
 	}
 	public JPanel changerImage(String image)
 	{
-		
+		return null;
 	}
 	public JPanel getPanel()
 	{
