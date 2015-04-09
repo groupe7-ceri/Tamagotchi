@@ -12,13 +12,14 @@ public class Interface extends JFrame
 	private int x, y;			// taille de la fenetre
 	private JFrame fenetre;
 	private JPanel principal;	// conteneur principal
-	public Interface(int x, int y)
+	// Constructeur principal, permet de générer la fenetre principale
+	public Interface(Tamagotchi tama)
 	{
 		System.out.println("Initialisation de l'interface graphique ...");
-		this.x = x;
-		this.y = y;
+		this.x = 800;
+		this.y = 300;
 		this.fenetre = new JFrame();
-		this.configFenetre();
+		this.configFenetre("Tamagotchi - Nom");
 
 		// Définition des conteneurs
 		JPanel panNom = new JPanel();
@@ -73,7 +74,7 @@ public class Interface extends JFrame
 		JButton btAction = new JButton("Effectuer");
 
 		// Image
-		Animation image = new Animation("pikachu.png", panImage.getWidth(), panImage.getHeight());
+		Animation image = new Animation("images/pikachu.png", panImage.getWidth(), panImage.getHeight());
 		panImage = image.getPanel();
 
 		// On rempli la fenetre (et configuration des layouts)
@@ -184,10 +185,79 @@ public class Interface extends JFrame
 		this.fenetre.setContentPane(this.principal);
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
 	}
-	private void configFenetre()
+	// Constructeur surchargé permettant d'afficher l'interface de création d'un tamagotchi
+	public Interface(int x, int y)
+	{
+		System.out.println("Interface - Création d'un nouveau tamagotchi");
+		this.x = x;
+		this.y = y;
+		this.fenetre = new JFrame();
+		this.configFenetre("Création d'un tamagotchi");
+		// Définition des conteneurs
+		JPanel panNom = new JPanel();
+		JPanel panType = new JPanel();
+		JPanel panBoutons = new JPanel();
+
+		// Textes
+		JLabel nom = new JLabel("Nom :");
+		JLabel type = new JLabel("Type :");
+		
+		// Boutons
+		JButton btValider = new JButton("Valider");
+		JButton btAnnuler = new JButton("Annuler");
+
+		// Liste déroulante type
+		Choice selectType = new Choice();
+		selectType.addItem("Sélectionnez");
+		selectType.addItem("Humain");
+		selectType.addItem("Animal");
+		selectType.addItem("Robot");
+		selectType.addItem("Brique");
+		selectType.addItem("Bactérie");
+
+		// Champ de saise
+		JTextField saisieNom = new JTextField();
+		saisieNom.setPreferredSize(new Dimension(60, 20));
+
+		// On rempli la fenetre (et configuration des layouts)
+		panNom.add(nom);
+		panNom.add(saisieNom);
+		panType.add(type);
+		panType.add(selectType);
+
+		panBoutons.add(btValider);
+		panBoutons.add(btAnnuler);
+
+		// Placements des JPanel
+		this.principal = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		this.principal.add(panNom, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 1;
+		this.principal.add(panType, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 2;
+		this.principal.add(panBoutons, c);
+
+		// Génération de la fenetre
+		this.fenetre.setContentPane(this.principal);
+		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
+	}
+	private void configFenetre(String nomFenetre)
 	{
 		// Configuration de la fenetre
-		this.fenetre.setTitle("Tamagotchi");
+		this.fenetre.setTitle(nomFenetre);
 		this.fenetre.setSize(this.x, this.y);
 		this.fenetre.setLocationRelativeTo(null);
 		this.fenetre.setResizable(false);

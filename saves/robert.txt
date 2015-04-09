@@ -1,0 +1,3 @@
+nom=Robert
+type=Animal
+

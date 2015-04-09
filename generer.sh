@@ -13,7 +13,7 @@ touch $nom
 echo "/* Fichier $nom" > $nom
 echo "Crée le $jour" >> $nom
 echo "MAJ : $jour" >> $nom
-echo "Description : Entrez la description ici" >> $nom
+echo "Description : Entrez la description ici */" >> $nom
 echo "" >> $nom
 echo "public class $1" >> $nom
 echo "{" >> $nom
