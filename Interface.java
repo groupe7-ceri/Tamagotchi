@@ -5,13 +5,19 @@ MAJ : 06/04/2015 */
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
+import java.util.Arrays;
 
-public class Interface extends JFrame
+public class Interface extends JFrame implements ActionListener
 {
 	private int x, y;			// taille de la fenetre
 	private JFrame fenetre;
 	private JPanel principal;	// conteneur principal
+	private JTextField saisieNom;
+	private Choice selectType;
+	private String[] typesTama = {"Humain", "Animal", "Robot", "Brique", "Bactérie"};
+	private boolean etat;
 	// Constructeur principal, permet de générer la fenetre principale
 	public Interface(Tamagotchi tama)
 	{
@@ -181,6 +187,10 @@ public class Interface extends JFrame
 		c.gridx = 1;
 		c.gridy = 4;
 		this.principal.add(panSelect, c);
+
+		// Attachement des évenements sur les boutons
+		//btValider.addActionListener(this);
+
 		// Génération de la fenetre
 		this.fenetre.setContentPane(this.principal);
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
@@ -188,7 +198,6 @@ public class Interface extends JFrame
 	// Constructeur surchargé permettant d'afficher l'interface de création d'un tamagotchi
 	public Interface(int x, int y)
 	{
-		System.out.println("Interface - Création d'un nouveau tamagotchi");
 		this.x = x;
 		this.y = y;
 		this.fenetre = new JFrame();
@@ -207,17 +216,16 @@ public class Interface extends JFrame
 		JButton btAnnuler = new JButton("Annuler");
 
 		// Liste déroulante type
-		Choice selectType = new Choice();
+		this.selectType = new Choice();
 		selectType.addItem("Sélectionnez");
-		selectType.addItem("Humain");
-		selectType.addItem("Animal");
-		selectType.addItem("Robot");
-		selectType.addItem("Brique");
-		selectType.addItem("Bactérie");
+		for(int i = 0; i < this.typesTama.length; i++)
+		{
+			selectType.addItem(this.typesTama[i]);
+		}
 
 		// Champ de saise
-		JTextField saisieNom = new JTextField();
-		saisieNom.setPreferredSize(new Dimension(60, 20));
+		this.saisieNom = new JTextField();
+		this.saisieNom.setPreferredSize(new Dimension(70, 20));
 
 		// On rempli la fenetre (et configuration des layouts)
 		panNom.add(nom);
@@ -250,6 +258,10 @@ public class Interface extends JFrame
 		c.gridy = 2;
 		this.principal.add(panBoutons, c);
 
+		// Attachement des évenements sur les boutons
+		btValider.addActionListener(this);
+		btAnnuler.addActionListener(this);
+
 		// Génération de la fenetre
 		this.fenetre.setContentPane(this.principal);
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
@@ -262,6 +274,55 @@ public class Interface extends JFrame
 		this.fenetre.setLocationRelativeTo(null);
 		this.fenetre.setResizable(false);
 		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
+	}
+	private void afficherMessage(String message, String titre, int type)
+	{
+		JOptionPane boite = new JOptionPane();
+		boite.showMessageDialog(null, message, titre, type);
+	}
+	public void actionPerformed(ActionEvent arg0)
+	{
+		JButton bt = (JButton) arg0.getSource();
+		switch(bt.getText())
+		{
+			case "Valider":
+			{
+				if(!this.saisieNom.getText().equals("")) // vérification du champ saisieNom
+				{
+					System.out.println("[Validation] saisieNom vaut : " + this.saisieNom.getText());
+					System.out.println("[Validation] selectType vaut : " + this.selectType.getSelectedItem());
+					String valeur = this.selectType.getSelectedItem();
+					if((valeur != "Sélectionnez") && (Arrays.asList(this.typesTama).contains(valeur)))	// vérifie que le type est bien définie dans l'appli
+					{
+						System.out.println("Ok");
+						// tout est ok, on peut créer le fichier texte
+						this.etat = true;
+					}
+					else
+					{
+						// Type de tamagotchi inconnu
+						this.afficherMessage("Ce type de tamagotchi est inconnu, veuillez en choisir un dans la liste", "Type inconnu", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				else
+				{
+					this.afficherMessage("Vous devez donner un nom à votre tamagotchi !", "Pas de nom", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			break;
+			case "Annuler":
+			{
+				System.out.println("Bouton Annuler cliqué, on ferme l'application");
+			}
+			break;
+			default:
+				break;
+
+		}
+	}
+	public boolean getEtat()
+	{
+		return this.etat;
 	}
 	public void rafraichir()
 	{

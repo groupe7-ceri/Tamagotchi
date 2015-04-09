@@ -1,7 +1,7 @@
 /* Fichier Tamagotchi.java
 Crée le jeudi 9 avril 2015
 MAJ : jeudi 9 avril 2015
-Description : Entrez la description ici */
+Description : Classe principale du Tamagotchi */
 
 public class Tamagotchi
 {
