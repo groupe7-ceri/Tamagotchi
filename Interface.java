@@ -8,8 +8,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.Arrays;
+import java.awt.event.WindowListener;
 
-public class Interface extends JFrame implements ActionListener
+
+public class Interface extends JFrame implements ActionListener, WindowListener
 {
 	private int x, y;			// taille de la fenetre
 	private JFrame fenetre;
@@ -17,7 +19,7 @@ public class Interface extends JFrame implements ActionListener
 	private JTextField saisieNom;
 	private Choice selectType;
 	private String[] typesTama = {"Humain", "Animal", "Robot", "Brique", "Bactérie"};
-	private boolean etat;
+	private boolean etat;		// détermine si la fenetre est fermé
 	// Constructeur principal, permet de générer la fenetre principale
 	public Interface(Tamagotchi tama)
 	{
@@ -196,72 +198,78 @@ public class Interface extends JFrame implements ActionListener
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
 	}
 	// Constructeur surchargé permettant d'afficher l'interface de création d'un tamagotchi
-	public Interface(int x, int y)
+	public Interface(boolean nouveau, int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 		this.fenetre = new JFrame();
-		this.configFenetre("Création d'un tamagotchi");
-		// Définition des conteneurs
-		JPanel panNom = new JPanel();
-		JPanel panType = new JPanel();
-		JPanel panBoutons = new JPanel();
-
-		// Textes
-		JLabel nom = new JLabel("Nom :");
-		JLabel type = new JLabel("Type :");
-		
-		// Boutons
-		JButton btValider = new JButton("Valider");
-		JButton btAnnuler = new JButton("Annuler");
-
-		// Liste déroulante type
-		this.selectType = new Choice();
-		selectType.addItem("Sélectionnez");
-		for(int i = 0; i < this.typesTama.length; i++)
+		if(nouveau)		// Création de la fenetre de création d'un tamagotchi
 		{
-			selectType.addItem(this.typesTama[i]);
+			this.configFenetre("Création d'un tamagotchi");
+			// Définition des conteneurs
+			JPanel panNom = new JPanel();
+			JPanel panType = new JPanel();
+			JPanel panBoutons = new JPanel();
+
+			// Textes
+			JLabel nom = new JLabel("Nom :");
+			JLabel type = new JLabel("Type :");
+			
+			// Boutons
+			JButton btValider = new JButton("Valider");
+			JButton btAnnuler = new JButton("Annuler");
+
+			// Liste déroulante type
+			this.selectType = new Choice();
+			selectType.addItem("Sélectionnez");
+			for(int i = 0; i < this.typesTama.length; i++)
+			{
+				selectType.addItem(this.typesTama[i]);
+			}
+
+			// Champ de saise
+			this.saisieNom = new JTextField();
+			this.saisieNom.setPreferredSize(new Dimension(70, 20));
+
+			// On rempli la fenetre (et configuration des layouts)
+			panNom.add(nom);
+			panNom.add(saisieNom);
+			panType.add(type);
+			panType.add(selectType);
+
+			panBoutons.add(btValider);
+			panBoutons.add(btAnnuler);
+
+			// Placements des JPanel
+			this.principal = new JPanel(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 1;
+			c.gridx = 0;
+			c.gridy = 0;
+			this.principal.add(panNom, c);
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.5;
+			c.gridx = 0;
+			c.gridy = 1;
+			this.principal.add(panType, c);
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.5;
+			c.gridx = 0;
+			c.gridy = 2;
+			this.principal.add(panBoutons, c);
+
+			// Attachement des évenements sur les boutons
+			btValider.addActionListener(this);
+			btAnnuler.addActionListener(this);
 		}
+		else 		// création de la fenetre de sélection d'un tamagotchi
+		{
 
-		// Champ de saise
-		this.saisieNom = new JTextField();
-		this.saisieNom.setPreferredSize(new Dimension(70, 20));
-
-		// On rempli la fenetre (et configuration des layouts)
-		panNom.add(nom);
-		panNom.add(saisieNom);
-		panType.add(type);
-		panType.add(selectType);
-
-		panBoutons.add(btValider);
-		panBoutons.add(btAnnuler);
-
-		// Placements des JPanel
-		this.principal = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1;
-		c.gridx = 0;
-		c.gridy = 0;
-		this.principal.add(panNom, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
-		c.gridx = 0;
-		c.gridy = 1;
-		this.principal.add(panType, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
-		c.gridx = 0;
-		c.gridy = 2;
-		this.principal.add(panBoutons, c);
-
-		// Attachement des évenements sur les boutons
-		btValider.addActionListener(this);
-		btAnnuler.addActionListener(this);
-
+		}
 		// Génération de la fenetre
 		this.fenetre.setContentPane(this.principal);
 		this.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
@@ -274,6 +282,7 @@ public class Interface extends JFrame implements ActionListener
 		this.fenetre.setLocationRelativeTo(null);
 		this.fenetre.setResizable(false);
 		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
+		this.fenetre.addWindowListener(this);
 	}
 	private void afficherMessage(String message, String titre, int type)
 	{
@@ -297,6 +306,7 @@ public class Interface extends JFrame implements ActionListener
 						System.out.println("Ok");
 						// tout est ok, on peut créer le fichier texte
 						this.etat = true;
+						this.fenetre.dispose();		// ferme de la fenetre
 					}
 					else
 					{
@@ -320,6 +330,23 @@ public class Interface extends JFrame implements ActionListener
 
 		}
 	}
+	public String getValeur(String type)
+	{
+		switch(type)
+		{
+			case "nom":
+				return this.saisieNom.getText();
+			case "type":
+				return this.selectType.getSelectedItem();
+			default:
+				return null;
+		}
+	}
+	public String[] getFichier()
+	{
+		System.out.println("Retourne le fichier associé");
+		return null;
+	}
 	public boolean getEtat()
 	{
 		return this.etat;
@@ -332,4 +359,39 @@ public class Interface extends JFrame implements ActionListener
 	{
 		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur);
 	}
+	@Override
+    public void windowOpened(WindowEvent e)
+    {
+
+    }
+    @Override
+    public void windowClosing(WindowEvent e)
+    {
+
+    }
+    @Override
+    public void windowClosed(WindowEvent e)
+    {
+    	System.out.println("Fermeture de la fenetre détectée");
+    }
+    @Override
+    public void windowIconified(WindowEvent e)
+    {
+
+    }
+    @Override
+    public void windowDeiconified(WindowEvent e)
+    {
+
+    }
+    @Override
+    public void windowActivated(WindowEvent e)
+    {
+
+    }
+    @Override
+    public void windowDeactivated(WindowEvent e)
+    {
+
+    }
 }
