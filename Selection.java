@@ -10,16 +10,17 @@ import java.awt.event.WindowListener;
 
 public class Selection extends Interface
 {
-	public Selection()
+	private Fichier fichier;
+	// liste contient la liste des fichiers de sauvegarde
+	public Selection(String[] liste)
 	{
 		super(300, 200);	// on dessine la fenetre en elle meme (via la classe mère Interface)
 		super.configFenetre("Sélection d'un tamagotchi");
 		super.fenetre.setContentPane(this.principal);
 		super.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
 	}
-	public String[] getFichier()
+	public Fichier getFichier()
 	{
-		System.out.println("Retourne le fichier du tamagotchi généré");
-		return null;
+		return this.fichier;
 	}
 }

@@ -12,10 +12,9 @@ public class Principale extends Interface
 {
 	public Principale(Tamagotchi tama)
 	{
-		System.out.println("Initialisation de l'interface graphique ...");
 		super(800, 300); // 800, 300
 		super.configFenetre("Tamagotchi - Nom");
-
+		System.out.println("Initialisation de l'interface graphique ...");
 		// Définition des conteneurs
 		JPanel panNom = new JPanel();
 		//panNom.setPreferredSize(new Dimension(60, 40));

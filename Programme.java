@@ -1,6 +1,6 @@
 /* Fichier Programme.java 
 Classe principal permettant de gérer le jeu 
-MAJ : 2 avril 2015 */
+MAJ : 12 avril 2015 */
 
 import java.io.File;
 import javax.swing.JOptionPane;
@@ -13,8 +13,7 @@ public class Programme
 	}
 	public static void main(String[] args)
 	{
-		boolean nouveau = false;	// tamagotchi vierge ou non
-		String[] fichierActuel;
+		Fichier fichierActuel;
 		System.out.println("Projet Tamagotchi - Modélisation UML");
 		System.out.println("Elodie Boloré - Jérémie Décome - Thibaut Miranda");
 		System.out.println("Version : 0.1.2");
@@ -28,13 +27,11 @@ public class Programme
 			// On sélectionne (ou créé le fichier de sauvegarde)
 			if(option == JOptionPane.OK_OPTION)
 			{
-				System.out.println("Fenetre de sélection du tamagotchi");
-				Selection fenSelection = new Selection();
+				Selection fenSelection = new Selection(dir);
 				fichierActuel = fenSelection.getFichier();
 			}
 			else
 			{
-				System.out.println("Création d'un nouveau tamagotchi");
 				Creation fenNouveau = new Creation();
 				fichierActuel = fenNouveau.getFichier();
 				fenNouveau = null;

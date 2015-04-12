@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<application>
+    <tamagotchi>
+		<nom>Robert</nom>
+		<type>Animal</type>
+		<vie>100</vie>
+		<faim>40</faim>
+		<fatigue>40</fatigue>
+		<energie>100</energie>
+		<moral>80</moral>
+		<sante>70</sante>
+		<toilettes>40</toilettes>
+		<maison>false</maison>
+		<dormir>false</dormir>
+		<deplacement>false</deplacement>
+		<lastMAJ>1428874361</lastMAJ>
+	</tamagotchi>
+</application>

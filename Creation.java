@@ -14,6 +14,7 @@ public class Creation extends Interface
 	private JTextField saisieNom;
 	private Choice selectType;
 	private String[] typesTama = {"Humain", "Animal", "Robot", "Brique", "Bactérie"};
+	private Fichier fichier;
 	public Creation()
 	{
 		super(300, 200);	// on dessine la fenetre en elle meme (via la classe mère Interface)
@@ -90,13 +91,12 @@ public class Creation extends Interface
 			{
 				if(!this.saisieNom.getText().equals("")) // vérification du champ saisieNom
 				{
-					System.out.println("[Validation] saisieNom vaut : " + this.saisieNom.getText());
-					System.out.println("[Validation] selectType vaut : " + this.selectType.getSelectedItem());
 					String valeur = this.selectType.getSelectedItem();
 					if((valeur != "Sélectionnez") && (Arrays.asList(this.typesTama).contains(valeur)))	// vérifie que le type est bien définie dans l'appli
 					{
 						System.out.println("Ok");
 						// tout est ok, on peut créer le fichier texte
+						fichier = new Fichier(this.saisieNom.getText(), valeur);
 						this.etat = true;
 						this.fenetre.dispose();		// ferme de la fenetre
 					}
@@ -122,9 +122,8 @@ public class Creation extends Interface
 
 		}
 	}
-	public String[] getFichier()
+	public Fichier getFichier()
 	{
-		System.out.println("Retourne le fichier du tamagotchi généré");
-		return null;
+		return this.fichier;
 	}
 }

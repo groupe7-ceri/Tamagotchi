@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application>
+  <tamagotchi>
+    <nom>Dédé</nom>
+    <type>Brique</type>
+    <vie>100</vie>
+    <faim>0</faim>
+    <fatigue>0</fatigue>
+    <energie>0</energie>
+    <moral>90</moral>
+    <sante>100</sante>
+    <toilettes>0</toilettes>
+    <maison>false</maison>
+    <dormir>false</dormir>
+    <deplacement>false</deplacement>
+    <lastMAJ>1428879908</lastMAJ>
+  </tamagotchi>
+</application>
