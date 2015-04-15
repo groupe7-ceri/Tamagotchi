@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <application>
   <tamagotchi>
-    <nom>Robert</nom>
-    <type>Animal</type>
+    <nom>WallE</nom>
+    <type>Robot</type>
     <vie>98</vie>
-    <faim>40</faim>
-    <fatigue>40</fatigue>
-    <energie>100</energie>
-    <moral>80</moral>
+    <faim>0</faim>
+    <fatigue>0</fatigue>
+    <energie>0</energie>
+    <moral>90</moral>
     <sante>42</sante>
-    <toilettes>40</toilettes>
+    <toilettes>0</toilettes>
     <maison>false</maison>
     <dormir>true</dormir>
     <deplacement>false</deplacement>
-    <lastMAJ>1428874361</lastMAJ>
+    <lastMAJ>1429130904</lastMAJ>
   </tamagotchi>
 </application>
