@@ -5,8 +5,8 @@ Description : Classe principale du Tamagotchi */
 
 public class Tamagotchi
 {
-	public Tamagotchi()
+	public Tamagotchi(Fichier file)
 	{
-		System.out.println("Tamagotchi créé");
+		System.out.println("Tamagotchi créé avec le fichier " + file.getNom());
 	}
 }

@@ -38,9 +38,10 @@ public class Programme
 			}
 		}
 		// La fenetre création ou sélection tamagotchi est fermée, on peut afficher la fenetre principale
-		Tamagotchi tama = new Tamagotchi(); // Instanciation de l'objet Tamagotchi
+		System.out.println("Démarrage de la fenetre principale");
+		//Tamagotchi tama = new Tamagotchi(); // Instanciation de l'objet Tamagotchi
 		
 		// Hydratation de l'objet Tamagotchi avec un nouveau tamagotchi (si nouveau) ou celui sélectionné
-		Principale fenetre = new Principale(tama);
+		//Principale fenetre = new Principale(tama);
 	}
 }
