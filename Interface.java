@@ -9,9 +9,9 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.Arrays;
 import java.awt.event.WindowListener;
+import java.util.Observable;
 
-
-public class Interface extends JFrame implements ActionListener, WindowListener
+public class Interface extends Observable implements ActionListener, WindowListener//, Runnable
 {
 	protected int x, y;			// taille de la fenetre
 	protected JFrame fenetre;
@@ -24,6 +24,9 @@ public class Interface extends JFrame implements ActionListener, WindowListener
 		this.y = y;
 		this.fenetre = new JFrame();
 		this.principal = new JPanel();
+		// Démarrage du thread
+		//this.addObserver(tama);
+		//this.start();
 	}
 	protected void configFenetre(String nomFenetre)
 	{
@@ -33,7 +36,7 @@ public class Interface extends JFrame implements ActionListener, WindowListener
 		this.fenetre.setLocationRelativeTo(null);
 		this.fenetre.setResizable(false);
 		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
-		this.fenetre.addWindowListener(this);
+		//this.fenetre.addWindowListener(this);
 	}
 	protected void afficherMessage(String message, String titre, int type)
 	{
@@ -52,6 +55,11 @@ public class Interface extends JFrame implements ActionListener, WindowListener
 	{
 		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur);
 	}
+	/*@Override
+	public void run()
+	{
+
+	}*/
 	@Override
 	public void actionPerformed(ActionEvent arg0)
 	{

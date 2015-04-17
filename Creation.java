@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.WindowListener;
 
-public class Creation extends Interface
+public class Creation extends Interface //implements Runnable
 {
 	private JTextField saisieNom;
 	private Choice selectType;

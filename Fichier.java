@@ -4,6 +4,7 @@ MAJ : mercredi 15 avril 2015
 Description : Gère l'interaction avec le fichier XML présent sur le disque */
 
 import java.io.File;
+import java.io.IOException;
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -26,7 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import java.lang.Enum;
 import org.xml.sax.SAXException;
-import java.io.IOException;
+
 
 public class Fichier
 {
@@ -34,7 +35,6 @@ public class Fichier
 	private String dossier = "saves/";
 	private String[] data;		// est l'image du fichier XML au chargement et sert de tampon
 	private String[] etats;
-	//private String[] defaut;	// n'a pas l'air d'etre utile en attribut
 	private int nb = 13;
 	private Element[] elements;
 	private Element racine;
@@ -42,6 +42,7 @@ public class Fichier
 	private String nomFichier;
 	public Fichier(String nomTama, String typeTama)
 	{
+		System.out.println("[Fichier] nom : " + nomTama + " - type : " + typeTama);
 		this.fichier = null;
 		this.data = new String[this.nb];
 		this.elements = new Element[this.nb];
@@ -72,7 +73,7 @@ public class Fichier
     		this.fichier = new File(this.dossier + nomFichier);
 			Document document= builder.parse(this.dossier + nomFichier);
 			this.racine = document.getDocumentElement();
-			NodeList racineNoeuds = racine.getChildNodes();
+			NodeList racineNoeuds = this.racine.getChildNodes();
 			int nbRacineNoeuds = racineNoeuds.getLength();
 			
 			for (int i = 0; i < nbRacineNoeuds; i++)
@@ -186,7 +187,6 @@ public class Fichier
 	{
 		System.out.println(pos + ") Etat " + this.etats[pos] + " : " + this.data[pos]);
 	}
-	
 	public void sauvegarde()
 	{
 		for(int i = 0; i < this.nb; i++)

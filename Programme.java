@@ -1,22 +1,30 @@
 /* Fichier Programme.java 
 Classe principal permettant de gérer le jeu 
-MAJ : 12 avril 2015 */
+MAJ : 16 avril 2015 */
 
 import java.io.File;
 import javax.swing.JOptionPane;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Programme
+public class Programme extends Observable implements Runnable, Observer
 {
-	private Tamagotchi creerTamagotchi(String[] fichier)
+	@Override
+	public void run()
 	{
-		return null;
+
+	}
+	@Override
+	public void update(Observable mere, Object o)
+	{
+
 	}
 	public static void main(String[] args)
 	{
-		Fichier fichierActuel;
+		Fichier fichierActuel = null;
 		System.out.println("Projet Tamagotchi - Modélisation UML");
 		System.out.println("Elodie Boloré - Jérémie Décome - Thibaut Miranda");
-		System.out.println("Version : 0.1.2");
+		System.out.println("Version : 0.2");
 		System.out.println("Démarrage de l'application ...");
 		// Détermine si le tamagotchi est nouveau (pas de fichier de sauvegarde) ou non (on propose à l'utilisateur de sélectionner un tamagotchi)
 		String[] dir = new File("saves/").list();
@@ -36,6 +44,12 @@ public class Programme
 				fichierActuel = fenNouveau.getFichier();
 				fenNouveau = null;
 			}
+		}
+		else	// On crée un nouveau tamagotchi
+		{
+			Creation fenNouveau = new Creation();
+			fichierActuel = fenNouveau.getFichier();
+			fenNouveau = null;
 		}
 		// La fenetre création ou sélection tamagotchi est fermée, on peut afficher la fenetre principale
 		System.out.println("Démarrage de la fenetre principale");

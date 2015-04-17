@@ -8,13 +8,13 @@ fi
 nom="$1.java"
 jour=`date | cut -d"," -f1`
 
-#if [ "$2" = "" ]
-#then
-#	$descr = "Entrez la description ici"
-#else
-#then
-#	$descr = $2
-#fi
+if [ "$2" = "" ]
+then
+	$descr = "Entrez la description ici"
+else
+then
+	$descr = $2
+fi
 
 touch $nom
 echo "/* Fichier $nom" > $nom

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <application>
   <tamagotchi>
-    <nom>Bob</nom>
-    <type>Robot</type>
+    <nom>Test</nom>
+    <type>Humain</type>
     <vie>100</vie>
     <faim>0</faim>
     <fatigue>0</fatigue>
@@ -13,6 +13,6 @@
     <maison>false</maison>
     <dormir>false</dormir>
     <deplacement>false</deplacement>
-    <lastMAJ>1428879819</lastMAJ>
+    <lastMAJ>1429132202</lastMAJ>
   </tamagotchi>
 </application>
