@@ -42,7 +42,6 @@ public class Fichier
 	private String nomFichier;
 	public Fichier(String nomTama, String typeTama)
 	{
-		System.out.println("[Fichier] nom : " + nomTama + " - type : " + typeTama);
 		this.fichier = null;
 		this.data = new String[this.nb];
 		this.elements = new Element[this.nb];
@@ -70,8 +69,9 @@ public class Fichier
 		try
 		{
     		DocumentBuilder builder = factory.newDocumentBuilder();
-    		this.fichier = new File(this.dossier + nomFichier);
-			Document document= builder.parse(this.dossier + nomFichier);
+    		this.nomFichier = this.dossier + nomFichier;
+    		this.fichier = new File(this.nomFichier);
+			Document document= builder.parse(this.nomFichier);
 			this.racine = document.getDocumentElement();
 			NodeList racineNoeuds = this.racine.getChildNodes();
 			int nbRacineNoeuds = racineNoeuds.getLength();
@@ -201,5 +201,44 @@ public class Fichier
 	{
 		return this.nomFichier;
 	}
+	public int getEtatInt(int pos)
+	{
+		if((pos >= 2) && (pos <= 8))
+			return Integer.parseInt(this.data[pos]);
+		else
+			return -1;
+	}
+	public boolean getEtatBool(int pos)
+	{
+		boolean res = false;
+		if((pos >= 9) && (pos <= 11))
+		{
+			// conversion en bool
+			if(this.data[pos].equals("true"))
+				res = true;
+			else
+				res = false;
+		}
+		return res;
+	}
+	public int getLastMaj()
+	{
+		return Integer.parseInt(this.data[12]);
+	}
+	public String getNomTama()
+	{
+		return this.data[0];
+	}
+	public String getTypeTama()
+	{
+		return this.data[1];
+	}
+	/*public static void main(String[] args)
+	{
+		System.out.println("Test Fichier");
+		Fichier test = new Fichier("Robert-Robot.xml");
+		int etat = test.getLastMaj();
+		System.out.println("Etat : " + etat);
+	}//*/
 	// Setteurs
 }

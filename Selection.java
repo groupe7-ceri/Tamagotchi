@@ -59,10 +59,11 @@ public class Selection extends Interface
 		super.principal.add(panSelecteur, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1;
+		c.weightx = 0.5;
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 1;
 		super.principal.add(panBoutons, c);
+
 
 		// Attachement des évenements sur les boutons
 		btValider.addActionListener(this);
@@ -80,56 +81,30 @@ public class Selection extends Interface
 				String valeur = this.selectTama.getSelectedItem();
 				if(valeur != "Sélectionnez")	// vérifie que le type est bien définie dans l'appli
 				{
-					System.out.println("Ok");
 					// tout est ok, on peut créer le fichier texte
-					fichier = new Fichier(this.saisieNom.getText(), valeur);
+					this.fichier = new Fichier(valeur);
 					this.etat = true;
+					setChanged();
+					notifyObservers(this.etat);
 					this.fenetre.dispose();		// ferme de la fenetre
 				}
 				else
 				{
 					// Type de tamagotchi inconnu
-					this.afficherMessage("Ce type de tamagotchi est inconnu, veuillez en choisir un dans la liste", "Type inconnu", JOptionPane.ERROR_MESSAGE);
+					super.afficherMessage("Ce type de tamagotchi est inconnu, veuillez en choisir un dans la liste", "Type inconnu", JOptionPane.ERROR_MESSAGE);
 				}	
 			}
 			break;
 			case "Annuler":
 			{
-				System.out.println("Bouton Annuler cliqué, on ferme l'application");
+				System.exit(0);
 			}
 			break;
 			default:
 				break;
 
 		}
-	/*private String lireNomSauvegarde(String chaine)
-	{
-		char[] tmp = chaine.toCharArray();
-		char[] tmp2 = new char[chaine.length()];
-		int i = 0;
-		while(tmp[i] != '-')
-		{
-			tmp2[i] += tmp[i];
-			i++;
-		}
-		String res = new String(tmp2);
-		res.replaceAll("\\s+", " ");
-		return res;
 	}
-	private String lireTypeSauvegarde(String chaine)
-	{
-		char[] tmp = chaine.toCharArray();
-		char[] tmp2 = new char[chaine.length()];
-		int i = 0;
-		while(tmp[i] != '.')
-		{
-			tmp2[i] += tmp[i];
-			i++;
-		}
-		String tmpString = new String(tmp2);
-		String[] tab = tmpString.split("-");
-		return tab[1];
-	}//*/
 	public Fichier getFichier()
 	{
 		return this.fichier;

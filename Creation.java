@@ -8,8 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.WindowListener;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Creation extends Interface //implements Runnable
+public class Creation extends Interface implements Runnable
 {
 	private JTextField saisieNom;
 	private Choice selectType;
@@ -98,32 +100,39 @@ public class Creation extends Interface //implements Runnable
 						// tout est ok, on peut créer le fichier texte
 						fichier = new Fichier(this.saisieNom.getText(), valeur);
 						this.etat = true;
+						setChanged();
+						notifyObservers(this.etat);
 						this.fenetre.dispose();		// ferme de la fenetre
+
 					}
 					else
 					{
 						// Type de tamagotchi inconnu
-						this.afficherMessage("Ce type de tamagotchi est inconnu, veuillez en choisir un dans la liste", "Type inconnu", JOptionPane.ERROR_MESSAGE);
+						super.afficherMessage("Ce type de tamagotchi est inconnu, veuillez en choisir un dans la liste", "Type inconnu", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				else
 				{
-					this.afficherMessage("Vous devez donner un nom à votre tamagotchi !", "Pas de nom", JOptionPane.ERROR_MESSAGE);
+					super.afficherMessage("Vous devez donner un nom à votre tamagotchi !", "Pas de nom", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			break;
 			case "Annuler":
 			{
-				System.out.println("Bouton Annuler cliqué, on ferme l'application");
+				System.exit(0);
 			}
 			break;
 			default:
 				break;
-
 		}
 	}
 	public Fichier getFichier()
 	{
 		return this.fichier;
+	}
+	@Override
+	public void run()
+	{
+
 	}
 }

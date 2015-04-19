@@ -24,9 +24,6 @@ public class Interface extends Observable implements ActionListener, WindowListe
 		this.y = y;
 		this.fenetre = new JFrame();
 		this.principal = new JPanel();
-		// Démarrage du thread
-		//this.addObserver(tama);
-		//this.start();
 	}
 	protected void configFenetre(String nomFenetre)
 	{
@@ -36,7 +33,6 @@ public class Interface extends Observable implements ActionListener, WindowListe
 		this.fenetre.setLocationRelativeTo(null);
 		this.fenetre.setResizable(false);
 		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // arrete le programme quand la fenetre est fermée
-		//this.fenetre.addWindowListener(this);
 	}
 	protected void afficherMessage(String message, String titre, int type)
 	{
@@ -53,7 +49,7 @@ public class Interface extends Observable implements ActionListener, WindowListe
 	}
 	public void majEtat(String etat, int valeur)
 	{
-		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur);
+		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur + " sur l'interface");
 	}
 	/*@Override
 	public void run()
