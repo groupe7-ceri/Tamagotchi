@@ -35,7 +35,7 @@ public class Fichier
 	private String dossier = "saves/";
 	private String[] data;		// est l'image du fichier XML au chargement et sert de tampon
 	private String[] etats;
-	private int nb = 13;
+	private int nb = 14;
 	private Element[] elements;
 	private Element racine;
 	private Element tama;
@@ -45,7 +45,7 @@ public class Fichier
 		this.fichier = null;
 		this.data = new String[this.nb];
 		this.elements = new Element[this.nb];
-		this.etats = new String[] {"nom", "type", "vie", "faim", "fatigue", "energie", "moral", "sante", "toilettes", "maison", "dormir", "deplacement", "lastMAJ"};
+		this.etats = new String[] {"nom", "type", "vie", "faim", "fatigue", "energie", "moral", "sante", "toilettes", "hygiene", "maison", "dormir", "deplacement", "lastMAJ"};
 		// On construit le nom du fichier
 		this.nomFichier = this.dossier + nomTama + "-" + typeTama + ".xml";
 		if(this.isFileExisted(this.nomFichier))
@@ -64,7 +64,7 @@ public class Fichier
 		}
 		this.data = new String[this.nb];
 		this.elements = new Element[this.nb];
-		this.etats = new String[] {"nom", "type", "vie", "faim", "fatigue", "energie", "moral", "sante", "toilettes", "maison", "dormir", "deplacement", "lastMAJ"};
+		this.etats = new String[] {"nom", "type", "vie", "faim", "fatigue", "energie", "moral", "sante", "toilettes", "hygiene", "maison", "dormir", "deplacement", "lastMAJ"};
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try
 		{
@@ -108,7 +108,7 @@ public class Fichier
 			if(nouveau)		// ajout des infos dans un nouveau fichier
 			{
 				long timestamp = System.currentTimeMillis() / 1000;
-				String[] defaut = new String[] {nomTama, typeTama, "100", "0", "0", "0", "90", "100", "0", "false", "false", "false", Long.toString(timestamp)};
+				String[] defaut = new String[] {nomTama, typeTama, "100", "0", "0", "0", "90", "100", "0", "90", "false", "false", "false", Long.toString(timestamp)};
 				this.racine = document.createElement("application");
 				for(int i = 0; i < this.nb; i++)
 				{
@@ -159,7 +159,7 @@ public class Fichier
 	public boolean majEtat(Etat etat, int valeur)
 	{
 		int pos = etat.ordinal();
-		if((pos >= 2) && (pos <= 8))	// cases du tableau correspondant aux états
+		if((pos >= 2) && (pos <= 9))	// cases du tableau correspondant aux états
 		{
 			this.data[pos] = Integer.toString(valeur);
 			return true;
@@ -170,7 +170,7 @@ public class Fichier
 	public boolean majEtat(Etat etat, boolean valeur)
 	{
 		int pos = etat.ordinal();
-		if((pos >= 9) && (pos <= 11))	// cases du tableau correspondant aux états
+		if((pos >= 10) && (pos <= 12))	// cases du tableau correspondant aux états
 		{
 			if(valeur)
 				this.data[pos] = "true";
@@ -203,7 +203,7 @@ public class Fichier
 	}
 	public int getEtatInt(int pos)
 	{
-		if((pos >= 2) && (pos <= 8))
+		if((pos >= 2) && (pos <= 9))
 			return Integer.parseInt(this.data[pos]);
 		else
 			return -1;
@@ -211,7 +211,7 @@ public class Fichier
 	public boolean getEtatBool(int pos)
 	{
 		boolean res = false;
-		if((pos >= 9) && (pos <= 11))
+		if((pos >= 10) && (pos <= 12))
 		{
 			// conversion en bool
 			if(this.data[pos].equals("true"))
@@ -223,7 +223,7 @@ public class Fichier
 	}
 	public int getLastMaj()
 	{
-		return Integer.parseInt(this.data[12]);
+		return Integer.parseInt(this.data[13]);
 	}
 	public String getNomTama()
 	{

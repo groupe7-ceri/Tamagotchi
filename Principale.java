@@ -1,19 +1,30 @@
 /* Fichier Principale.java
 Crée le dimanche 12 avril 2015
-MAJ : dimanche 12 avril 2015
+MAJ : lundi 20 avril 2015
 Description : Fenetre principale du programme */
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.WindowListener;
+import java.util.Observer;
+import java.util.Observable;
 
-public class Principale extends Interface
+public class Principale extends Interface implements Observer
 {
+	Choice selectActions;
+	Tamagotchi tama;
+	@Override
+	public void update(Observable obs, Object o)
+	{
+		String msg = ((String) o).toString();
+		System.out.println("Va chercher l'état ou le besoin " + msg + " sur l'objet Tama et rafrachi l'interface");
+	}
 	public Principale(Tamagotchi tama)
 	{
-		super(800, 300); // 800, 300
-		super.configFenetre("Tamagotchi - Nom");
+		super(800, 300);
+		this.tama = tama;
+		super.configFenetre("Tamagotchi " + this.tama.getNom());
 		System.out.println("Initialisation de l'interface graphique ...");
 		// Définition des conteneurs
 		JPanel panNom = new JPanel();
@@ -30,11 +41,11 @@ public class Principale extends Interface
 		JPanel panSelect = new JPanel();
 
 		// Textes résumé haut
-		JLabel nom = new JLabel("Nom :");
-		JLabel type = new JLabel("Type :");
-		JLabel humeur = new JLabel("Humeur :");
-		JLabel lieu = new JLabel("Lieu :");
-		JLabel lastMAJ = new JLabel("Dernière MAJ :");
+		JLabel nom = new JLabel("Nom : " + tama.getNom());
+		JLabel type = new JLabel("Type : " + tama.getType());
+		JLabel humeur = new JLabel("Humeur : " + tama.getHumeur());
+		JLabel lieu = new JLabel("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
+		JLabel lastMAJ = new JLabel("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
 		JLabel nextMAJ = new JLabel("Prochaine MAJ :");
 		
 		// Boutons (panel raccourci action et boutons divers)
@@ -49,7 +60,7 @@ public class Principale extends Interface
 		JButton btMoral = new JButton("S'amuser avec");
 
 		// Barres de progression dans panBarre (et textes)
-		JProgressBar barreFaim = new JProgressBar();
+		JProgressBar barreFaim = new JProgressBar(0, 100);
 		JProgressBar barreEnergie = new JProgressBar();
 		JProgressBar barreHygiene = new JProgressBar();
 		JProgressBar barreWC = new JProgressBar();
@@ -61,10 +72,10 @@ public class Principale extends Interface
 		JLabel lbMoral = new JLabel("Moral / Bonheur");
 
 		// Gestion de la liste déroulante action (les options varient en fonction du type de tamagotchi)
-		Choice selectActions = new Choice();
-		selectActions.addItem("Sélectionnez");
-		selectActions.addItem("Action 1");
-		selectActions.addItem("Action 2");
+		this.selectActions = new Choice();
+		this.selectActions.addItem("Sélectionnez");
+		this.selectActions.addItem("Action 1");
+		this.selectActions.addItem("Action 2");
 		JButton btAction = new JButton("Effectuer");
 
 		// Image
@@ -176,11 +187,145 @@ public class Principale extends Interface
 		c.gridy = 4;
 		super.principal.add(panSelect, c);
 
+		// Initialisation des progress barres
+		barreFaim.setStringPainted(true);
+		barreFaim.setValue(tama.getEtatInt("nourriture"));
+		barreEnergie.setStringPainted(true);
+		barreEnergie.setValue(tama.getEtatInt("energie"));
+		barreWC.setStringPainted(true);
+		barreWC.setValue(tama.getEtatInt("toilettes"));
+		barreHygiene.setStringPainted(true);
+		barreHygiene.setValue(tama.getEtatInt("hygiene"));
+		barreMoral.setStringPainted(true);
+		barreMoral.setValue(tama.getEtatInt("moral"));
+
 		// Attachement des évenements sur les boutons
-		//btValider.addActionListener(this);
+		btQuitter.addActionListener(this);
+		btConfig.addActionListener(this);
+		btRefresh.addActionListener(this);
+		btAction.addActionListener(this);
+		btAbout.addActionListener(this);
+		btManger.addActionListener(this);
+		btDormir.addActionListener(this);
+		btDouche.addActionListener(this);
+		btWC.addActionListener(this);
+		btMoral.addActionListener(this);
 
 		// Génération de la fenetre
 		super.fenetre.setContentPane(this.principal);
 		super.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
+	}
+	private String afficheLieu(boolean maison)
+	{
+		if(maison)
+			return "Chez lui";
+		else
+		{
+			return "Dehors";
+		}
+	}
+	private String timestampToDate(int timestamp)
+	{
+		return "20/04/2015 - 09h48:00";
+	}
+	public void actionPerformed(ActionEvent arg0)
+	{
+		boolean refresh = false;
+		JButton bt = (JButton) arg0.getSource();
+		switch(bt.getText())
+		{
+			case "Quitter":
+			{
+				System.out.println("Sauvegarde, autres actions nécessaire et arret de l'application");
+				System.exit(0);
+			}
+			break;
+			case "Rafraichir":
+			{
+				refresh = true;
+			}
+			break;
+			case "Config":
+			{
+				System.out.println("Ouvre le panneau de configuration");
+			}
+			break;
+			case "Manger":
+			{
+				System.out.println("Donne à manger au tamagotchi");
+				tama.majBesoin("nourriture", 20);
+				refresh = true;
+			}
+			break;
+			case "Dormir":
+			{
+				System.out.println("Fait dormir le tamagotchi si il est chez lui");
+				tama.majBesoin("dormir", 20);
+				refresh = true;
+			}
+			break;
+			case "Douche":
+			{
+				System.out.println("Fait prendre une douche au tamagotchi si il est chez lui");
+				tama.majBesoin("hygiene", 20);
+				refresh = true;
+			}
+			break;
+			case "Toilettes":
+			{
+				System.out.println("Fait aller aux WC le tamagotchi");
+				tama.majBesoin("toilettes", 20);
+				refresh = true;
+			}
+			break;
+			case "S'amuser avec":
+			{
+				if(this.tama.getEtatBool("maison"))
+				{
+					JOptionPane jop = new JOptionPane();
+					int option = jop.showConfirmDialog(null, this.tama.getNom() + " est chez lui, voulez vous le faire sortir pour qu'il s'amuse ?", "Jeu", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if(option == JOptionPane.OK_OPTION)
+					{
+						refresh = true;
+					}
+					else
+					{
+
+					}
+				}
+			}
+			break;
+			case "Effectuer":
+			{
+				System.out.println("Effectue l'action " + this.selectActions.getSelectedItem());
+				refresh = true;
+			}
+			break;
+			case "A propos":
+			{
+				String texte = "UE - Modélisation objet et UML\n";
+				texte += "Projet Conception, modélisation et réalisation d'un tamagotchi\n";
+				texte += "Version : 0.4\n";
+				texte += "Auteurs :\n";
+				texte += "- Elodie Boloré\n";
+				texte += "- Jérémie Décome\n";
+				texte += "- Thibaut Miranda\n";
+				super.afficherMessage(texte, "A propos", JOptionPane.ERROR_MESSAGE);
+			}
+			break;
+			default:
+				break;
+		}
+		if(refresh)
+			this.rafraichir();
+	}
+	private void rafraichir()
+	{
+		System.out.println("Rafraichi l'interface");
+		super.fenetre.revalidate();
+	}
+	public void majEtat(String etat, int valeur)
+	{
+		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur + " sur l'interface");
 	}
 }

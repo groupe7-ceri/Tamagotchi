@@ -1,7 +1,7 @@
 /* Fichier Interface.java
-Description du fichier
-Crée le 02/04/2015
-MAJ : 06/04/2015 */
+Crée le jeudi 2 avril 2015
+MAJ : lundi 20 avril 2015
+Description : Classe de base des fenetres */
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,17 +39,10 @@ public class Interface extends Observable implements ActionListener, WindowListe
 		JOptionPane boite = new JOptionPane();
 		boite.showMessageDialog(null, message, titre, type);
 	}
+	// utile ?
 	public boolean getEtat()
 	{
 		return this.etat;
-	}
-	public void rafraichir()
-	{
-
-	}
-	public void majEtat(String etat, int valeur)
-	{
-		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur + " sur l'interface");
 	}
 	/*@Override
 	public void run()
