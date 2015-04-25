@@ -15,7 +15,7 @@ public class Creation extends Interface implements Runnable
 {
 	private JTextField saisieNom;
 	private Choice selectType;
-	private String[] typesTama = {"Humain", "Animal", "Robot", "Brique", "Bactérie"};
+	private String[] typesTama = {"Chat", "Chien", "Droide", "Bactérie", "Pokémon", "Brique"};	// uniquement les classes non abstraites (finales)
 	private Fichier fichier;
 	public Creation()
 	{
@@ -96,18 +96,15 @@ public class Creation extends Interface implements Runnable
 					String valeur = this.selectType.getSelectedItem();
 					if((valeur != "Sélectionnez") && (Arrays.asList(this.typesTama).contains(valeur)))	// vérifie que le type est bien définie dans l'appli
 					{
-						System.out.println("Ok");
 						// tout est ok, on peut créer le fichier texte
 						fichier = new Fichier(this.saisieNom.getText(), valeur);
 						this.etat = true;
 						setChanged();
 						notifyObservers(this.etat);
 						this.fenetre.dispose();		// ferme de la fenetre
-
 					}
 					else
 					{
-						// Type de tamagotchi inconnu
 						super.afficherMessage("Ce type de tamagotchi est inconnu, veuillez en choisir un dans la liste", "Type inconnu", JOptionPane.ERROR_MESSAGE);
 					}
 				}

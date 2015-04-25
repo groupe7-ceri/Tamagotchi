@@ -9,6 +9,12 @@ import java.awt.event.*;
 import java.awt.event.WindowListener;
 import java.util.Observer;
 import java.util.Observable;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.Format;
+import java.sql.Timestamp;
+
+
 
 public class Principale extends Interface implements Observer
 {
@@ -74,8 +80,9 @@ public class Principale extends Interface implements Observer
 		// Gestion de la liste déroulante action (les options varient en fonction du type de tamagotchi)
 		this.selectActions = new Choice();
 		this.selectActions.addItem("Sélectionnez");
-		this.selectActions.addItem("Action 1");
-		this.selectActions.addItem("Action 2");
+		String[] actions = this.tama.getActions();
+		for(int i = 0; i < actions.length; i++)
+			this.selectActions.addItem(actions[i]);
 		JButton btAction = new JButton("Effectuer");
 
 		// Image
@@ -224,9 +231,12 @@ public class Principale extends Interface implements Observer
 			return "Dehors";
 		}
 	}
-	private String timestampToDate(int timestamp)
+	private String timestampToDate(long timestamp)
 	{
-		return "20/04/2015 - 09h48:00";
+		System.out.println("Timestamp en entrée : " + timestamp);
+		Date date = new Date(timestamp);
+		Format format = new SimpleDateFormat("HH:mm:ss - dd/MM/yyyy");
+		return format.format(date);
 	}
 	public void actionPerformed(ActionEvent arg0)
 	{
@@ -237,6 +247,7 @@ public class Principale extends Interface implements Observer
 			case "Quitter":
 			{
 				System.out.println("Sauvegarde, autres actions nécessaire et arret de l'application");
+				this.tama.sauvegarde();
 				System.exit(0);
 			}
 			break;
@@ -252,28 +263,24 @@ public class Principale extends Interface implements Observer
 			break;
 			case "Manger":
 			{
-				System.out.println("Donne à manger au tamagotchi");
 				tama.majBesoin("nourriture", 20);
 				refresh = true;
 			}
 			break;
 			case "Dormir":
 			{
-				System.out.println("Fait dormir le tamagotchi si il est chez lui");
 				tama.majBesoin("dormir", 20);
 				refresh = true;
 			}
 			break;
 			case "Douche":
 			{
-				System.out.println("Fait prendre une douche au tamagotchi si il est chez lui");
 				tama.majBesoin("hygiene", 20);
 				refresh = true;
 			}
 			break;
 			case "Toilettes":
 			{
-				System.out.println("Fait aller aux WC le tamagotchi");
 				tama.majBesoin("toilettes", 20);
 				refresh = true;
 			}

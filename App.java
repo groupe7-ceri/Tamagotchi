@@ -36,6 +36,7 @@ public class App implements Observer
 	}
 	public void demarrer()
 	{
+		JOptionPane jop = new JOptionPane();
 		Selection fenSelection = null;
 		Creation fenNouveau = null;
 		System.out.println("Projet Tamagotchi - Modélisation UML");
@@ -46,7 +47,6 @@ public class App implements Observer
 		String[] dir = new File("saves/").list();
 		if(dir.length > 0)
 		{
-			JOptionPane jop = new JOptionPane();
 			int option = jop.showConfirmDialog(null, "Un ou plusieurs tamagotchis ont été trouvés, voulez vous charger une partie ?", "Lancement", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			// On sélectionne (ou créé le fichier de sauvegarde)
 			if(option == JOptionPane.OK_OPTION)
@@ -74,8 +74,39 @@ public class App implements Observer
 			fenNouveau.deleteObserver(this);
 		if(fenSelection != null)
 			fenSelection.deleteObserver(this);
-		Tamagotchi tama = new Tamagotchi(fichierActuel); // Instanciation de l'objet Tamagotchi avec le fichier
-		Principale fenetre = new Principale(tama);
-		tama.addObserver(fenetre);
+		String type = fichierActuel.getTypeTama();
+		// Création du tamagotchi en fonction de son type (que les classes finales)
+		Tamagotchi tama = null;
+		switch(type)
+		{
+			//"Chat", "Chien", "Droide", "Bactérie", "Pokémon", "Brique"
+			case "Chat":
+				tama = new Chat(fichierActuel);
+				break;
+			case "Chien":
+				tama = new Chien(fichierActuel);
+				break;
+			case "Droide":
+				tama = new Droide(fichierActuel);
+				break;
+			case "Bactérie":
+				tama = new Bacterie(fichierActuel);
+				break;
+			case "Pokémon":
+				tama = new Pokemon(fichierActuel);
+				break;
+			case "Brique":
+				tama = new Brique(fichierActuel);
+				break;
+			default:
+				jop.showMessageDialog(null, "Ce type de tamagotchi est inconnu ! Arret de l'application", "Erreur", JOptionPane.ERROR_MESSAGE);
+				System.exit(-2);
+				break;
+		}
+		if(tama != null)
+		{
+			Principale fenetre = new Principale(tama);
+			tama.addObserver(fenetre);
+		}
 	}
 }

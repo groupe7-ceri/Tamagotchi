@@ -3,11 +3,13 @@ Crée le jeudi 9 avril 2015
 MAJ : lundi 20 avril 2015
 Description : Classe principale du Tamagotchi */
 
+import java.lang.Enum;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Tamagotchi extends Observable implements Observer
+public abstract class Tamagotchi extends Observable implements Observer
 {
+	private Fichier save;
 	private String nom, type;
 	private Besoin nourriture, dormir, hygiene, toilettes, moral;
 	private EtatTama vie, fatigue, energie, sante;
@@ -17,6 +19,8 @@ public class Tamagotchi extends Observable implements Observer
 	private boolean notifMaj;		// flag permettant de savoir qu'un état a changer
 	public Tamagotchi(Fichier file)
 	{
+		//System.out.println("Instanciation du tamagotchi général avec le fichier " + file.getNomTama());
+		this.save = file;
 		this.nom = file.getNomTama();
 		this.type = file.getTypeTama();
 		this.vie = new EtatTama("vie", file.getEtatInt(2), 1);
@@ -35,13 +39,30 @@ public class Tamagotchi extends Observable implements Observer
 		this.majFichier = file.getLastMaj();
 		this.majEtats = this.majFichier;
 	}
+	// déclarations des méthodes des classes filles
+	abstract String[] getActions();
 	public void miseAJour(String etat)
 	{
 		setChanged();
 		notifyObservers(etat);
 	}
+	public void sauvegarde()
+	{
+		this.save.majEtat(Etat.VIE, this.vie.getValeur());
+		this.save.majEtat(Etat.FAIM, this.nourriture.getValeur());
+		this.save.majEtat(Etat.FATIGUE, this.fatigue.getValeur());
+		this.save.majEtat(Etat.ENERGIE, this.energie.getValeur());
+		this.save.majEtat(Etat.MORAL, this.moral.getValeur());
+		this.save.majEtat(Etat.SANTE, this.sante.getValeur());
+		this.save.majEtat(Etat.TOILETTES, this.toilettes.getValeur());
+		this.save.majEtat(Etat.MAISON, this.maisonEC);
+		this.save.majEtat(Etat.DORMIR, this.dormirEC);
+		this.save.majEtat(Etat.DEPLACEMENT, this.deplacementEC);
+		this.save.sauvegarde();
+	}
 	public void majBesoin(String besoin, int valeur)
 	{
+		System.out.println("[Tama] Satisfait le besoin " + besoin + " avec la valeur " + valeur);
 		switch(besoin)
 		{
 			case "nourriture":
