@@ -15,7 +15,6 @@ import java.text.Format;
 import java.sql.Timestamp;
 
 
-
 public class Principale extends Interface implements Observer
 {
 	Choice selectActions;
@@ -233,8 +232,8 @@ public class Principale extends Interface implements Observer
 	}
 	private String timestampToDate(long timestamp)
 	{
-		System.out.println("Timestamp en entrée : " + timestamp);
-		Date date = new Date(timestamp);
+		//System.out.println("Timestamp en entrée : " + timestamp);
+		Date date = new Date(timestamp * 1000L);
 		Format format = new SimpleDateFormat("HH:mm:ss - dd/MM/yyyy");
 		return format.format(date);
 	}

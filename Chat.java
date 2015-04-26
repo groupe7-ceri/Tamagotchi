@@ -5,7 +5,7 @@ Description : Classe finale type de Tamagotchi - Type Chat */
 
 public class Chat extends Animal
 {
-	private String[] actions = {"Dormir", "Manger", "Ronronner", "Faire son curieux"};
+	private String[] actions = {"Ronronner", "Faire chier le monde", "Faire son curieux"};
 	public Chat(Fichier file)
 	{
 		super(file);
