@@ -105,7 +105,11 @@ public class App implements Observer
 		}
 		if(tama != null)
 		{
+			Thread threadTama = new Thread(tama);
+			threadTama.start();
 			Principale fenetre = new Principale(tama);
+			Thread threadFenetre = new Thread(fenetre);
+			threadFenetre.start();
 			tama.addObserver(fenetre);
 		}
 	}

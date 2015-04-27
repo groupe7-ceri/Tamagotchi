@@ -1,22 +1,56 @@
-/* Fichier Inerte.java
+/* Fichier Vivant.java
 Crée le samedi 25 avril 2015
 MAJ : samedi 25 avril 2015
-Description :  */
+Description : Classe abstraite des types  */
 
-public abstract class Inerte extends Tamagotchi
+public abstract class Vivant extends Tamagotchi
 {
-	public Inerte(Fichier file)
+	private Besoin nourriture, dormir, hygiene, toilettes, moral;
+	private EtatTama fatigue, energie, sante;
+	protected boolean maisonEC, dormirEC, deplacementEC;	// indique l'état actuel du tamagotchi - en train de dormir ou à la maison, ... - EC pour En Cours
+	private boolean deplacement;
+	public Vivant(Fichier file)
 	{
-		super(file, false);
-		System.out.println("Tamagochti de type Inerte");
+		super(file, true);
+		this.nourriture = new Besoin("nourriture", file.getEtatInt(3), 1, true);
+		// Calcul du besoin de dormir, qui dépend de la fatigue et de l'énergie
+		this.fatigue = new EtatTama("fatigue",file.getEtatInt(4), 2);
+		this.dormir = new Besoin("dormir", this.fatigue.getValeur(), 1, true);
+		this.energie = new EtatTama("energie", file.getEtatInt(5), 2);
+		this.moral = new Besoin("moral", file.getEtatInt(6), 1, false);
+		this.sante = new EtatTama("sante", file.getEtatInt(7), 2);
+		this.toilettes = new Besoin("toilettes", file.getEtatInt(8), 1, true);
+		this.hygiene = new Besoin("hygiene", file.getEtatInt(9), 1, true);
+		this.maisonEC = file.getEtatBool(10);
+		this.dormirEC = file.getEtatBool(11);
+		this.deplacementEC = file.getEtatBool(12);
 	}
 	abstract String[] getActions();
 	abstract void effectuerAction(String action);
+
+	public void sauvegarde()
+	{
+		super.save.majEtat(Etat.FAIM, this.nourriture.getValeur());
+		super.save.majEtat(Etat.FATIGUE, this.fatigue.getValeur());
+		super.save.majEtat(Etat.ENERGIE, this.energie.getValeur());
+		super.save.majEtat(Etat.MORAL, this.moral.getValeur());
+		super.save.majEtat(Etat.SANTE, this.sante.getValeur());
+		super.save.majEtat(Etat.TOILETTES, this.toilettes.getValeur());
+		super.save.majEtat(Etat.MAISON, this.maisonEC);
+		super.save.majEtat(Etat.DORMIR, this.dormirEC);
+		super.save.majEtat(Etat.DEPLACEMENT, this.deplacementEC);
+		super.sauvegarde();
+	}
+	@Override
+	public void run()
+	{
+		super.run();
+	}
 	@Override
 	public void majBesoin(String besoin, int valeur)
 	{
 		System.out.println("[Sous classe] Satisfait le besoin " + besoin + " avec la valeur " + valeur);
-		/*switch(besoin)
+		switch(besoin)
 		{
 			case "nourriture":
 				this.nourriture.satisfaire(valeur);
@@ -44,14 +78,14 @@ public abstract class Inerte extends Tamagotchi
 				break;
 			default:
 				break;
-		}//*/
+		}
 		this.miseAJour(besoin);
 		//this.maj = Long.toInteger(System.currentTimeMillis()) / 1000;
 	}
 	@Override
 	public void majEtat(String etat, boolean valeur)
 	{
-		/*switch(etat)
+		switch(etat)
 		{
 			case "maison":
 				this.maisonEC = valeur;
@@ -64,16 +98,16 @@ public abstract class Inerte extends Tamagotchi
 				break;
 			default:
 				break;
-		}//*/
+		}
 	}
 	@Override
 	public int getEtatInt(String etat)
 	{
 		int ret = -1;
-		/*switch(etat)
+		switch(etat)
 		{
 			case "vie":
-				ret = this.vie.getValeur();
+				ret = super.vie.getValeur();
 				break;
 			case "nourriture":
 				ret = this.nourriture.getValeur();
@@ -99,14 +133,14 @@ public abstract class Inerte extends Tamagotchi
 			default:
 				ret = -42;
 				break;
-		}//*/
+		}
 		return ret;
 	}
 	@Override
 	public boolean getEtatBool(String etat)
 	{
-		boolean ret = false;
-		/*switch(etat)
+		boolean ret;
+		switch(etat)
 		{
 			case "maison":
 				ret = this.maisonEC;
@@ -120,7 +154,7 @@ public abstract class Inerte extends Tamagotchi
 			default:
 				ret = false;
 				break;
-		}//*/
+		}
 		return ret;
 	}
 }

@@ -3,9 +3,11 @@ Crée le samedi 25 avril 2015
 MAJ : samedi 25 avril 2015
 Description : Classe finale type de Tamagotchi - Type Brique */
 
-public class Brique extends Inerte
+import java.util.Arrays;
+
+public final class Brique extends Inerte
 {
-	private String[] actions = {"Dormir", "Manger", "Ronronner", "Faire son curieux"};
+	private String[] actions = {};
 	public Brique(Fichier file)
 	{
 		super(file);
@@ -15,5 +17,18 @@ public class Brique extends Inerte
 	public String[] getActions()
 	{
 		return this.actions;
+	}
+	@Override
+	public void effectuerAction(String action)
+	{
+		if(Arrays.asList(actions).contains(action))
+		{
+			System.out.println("Effectue l'action " + action);
+		}
+	}
+	@Override
+	public void run()
+	{
+		
 	}
 }

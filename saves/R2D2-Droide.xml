@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application>
+  <tamagotchi>
+    <nom>R2D2</nom>
+    <type>Droide</type>
+    <vie>100</vie>
+    <faim>0</faim>
+    <fatigue>0</fatigue>
+    <energie>0</energie>
+    <moral>90</moral>
+    <sante>100</sante>
+    <toilettes>0</toilettes>
+    <hygiene>90</hygiene>
+    <maison>false</maison>
+    <dormir>false</dormir>
+    <deplacement>false</deplacement>
+    <lastMAJ>1430165548</lastMAJ>
+  </tamagotchi>
+</application>

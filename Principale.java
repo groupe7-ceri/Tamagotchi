@@ -15,7 +15,7 @@ import java.text.Format;
 import java.sql.Timestamp;
 
 
-public class Principale extends Interface implements Observer
+public class Principale extends Interface implements Observer, Runnable
 {
 	Choice selectActions;
 	Tamagotchi tama;
@@ -24,6 +24,11 @@ public class Principale extends Interface implements Observer
 	{
 		String msg = ((String) o).toString();
 		System.out.println("Va chercher l'état ou le besoin " + msg + " sur l'objet Tama et rafrachi l'interface");
+	}
+	@Override
+	public void run()
+	{
+		
 	}
 	public Principale(Tamagotchi tama)
 	{
@@ -105,6 +110,7 @@ public class Principale extends Interface implements Observer
 		panSelect.add(btAbout);
 
 		panBarre.setLayout(new BoxLayout(panBarre, BoxLayout.PAGE_AXIS));
+
 		panBarre.add(lbFaim);
 		panBarre.add(barreFaim);
 		panBarre.add(lbEnergie);
@@ -115,14 +121,20 @@ public class Principale extends Interface implements Observer
 		panBarre.add(barreWC);
 		panBarre.add(lbMoral);
 		panBarre.add(barreMoral);
-
 		panShortActions.setLayout(new BoxLayout(panShortActions, BoxLayout.PAGE_AXIS));
 		panShortActions.add(btManger);
 		panShortActions.add(btDormir);
 		panShortActions.add(btDouche);
 		panShortActions.add(btWC);
 		panShortActions.add(btMoral);
-
+		if(!(tama instanceof Vivant))
+		{
+			btManger.setEnabled(false);
+			btDormir.setEnabled(false);
+			btDouche.setEnabled(false);
+			btWC.setEnabled(false);
+			btMoral.setEnabled(false);
+		}
 		// Placements des JPanel
 		super.principal = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -303,7 +315,7 @@ public class Principale extends Interface implements Observer
 			break;
 			case "Effectuer":
 			{
-				System.out.println("Effectue l'action " + this.selectActions.getSelectedItem());
+				this.tama.effectuerAction(this.selectActions.getSelectedItem());
 				refresh = true;
 			}
 			break;
@@ -323,7 +335,9 @@ public class Principale extends Interface implements Observer
 				break;
 		}
 		if(refresh)
+		{
 			this.rafraichir();
+		}
 	}
 	private void rafraichir()
 	{
