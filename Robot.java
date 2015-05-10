@@ -13,6 +13,11 @@ public abstract class Robot extends Tamagotchi
 	abstract String[] getActions();
 	abstract void effectuerAction(String action);
 	@Override
+	public String getHumeur()
+	{
+		return "Pas de sentiments !";
+	}
+	@Override
 	public void majBesoin(String besoin, int valeur)
 	{
 		System.out.println("[Sous classe] Satisfait le besoin " + besoin + " avec la valeur " + valeur);

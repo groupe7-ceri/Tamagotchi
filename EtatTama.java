@@ -1,6 +1,6 @@
 /* Fichier EtatTama.java
 Crée le lundi 20 avril 2015
-MAJ : lundi 20 avril 2015
+MAJ : mardi 28 avril 2015
 Description : Représente un état du tamagotchi (vie, fatigue, énergie, santé) */
 
 public class EtatTama
@@ -20,6 +20,7 @@ public class EtatTama
 	}
 	public void vie()
 	{
+		System.out.println("L'état " + this.type + " perd " + this.pas + " points");
 		if((this.valeur > 0) && (this.valeur < 101))
 		{
 			if(this.variation)	// l'état peut fluctuer dans le temps, donc naturellement, il tends vers 100 %

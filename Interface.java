@@ -39,6 +39,11 @@ public class Interface extends Observable implements ActionListener, WindowListe
 		JOptionPane boite = new JOptionPane();
 		boite.showMessageDialog(null, message, titre, type);
 	}
+	protected void rafraichir()
+	{
+		System.out.println("[Classe mère] rafraichi l'interface");
+		this.fenetre.revalidate();
+	}
 	// utile ?
 	public boolean getEtat()
 	{

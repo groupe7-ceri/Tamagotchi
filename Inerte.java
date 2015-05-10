@@ -13,6 +13,11 @@ public abstract class Inerte extends Tamagotchi
 	abstract String[] getActions();
 	abstract void effectuerAction(String action);
 	@Override
+	public String getHumeur()
+	{
+		return "Je suis inerte !";
+	}
+	@Override
 	public void majBesoin(String besoin, int valeur)
 	{
 		System.out.println("[Sous classe] Satisfait le besoin " + besoin + " avec la valeur " + valeur);

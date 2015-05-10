@@ -3,7 +3,7 @@
   <tamagotchi>
     <nom>Noisette</nom>
     <type>Chat</type>
-    <vie>100</vie>
+    <vie>89</vie>
     <faim>0</faim>
     <fatigue>0</fatigue>
     <energie>0</energie>

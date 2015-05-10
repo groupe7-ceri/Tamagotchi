@@ -17,13 +17,51 @@ import java.sql.Timestamp;
 
 public class Principale extends Interface implements Observer, Runnable
 {
-	Choice selectActions;
-	Tamagotchi tama;
+	private Choice selectActions;
+	private Tamagotchi tama;
+	private JProgressBar barreVie, barreFaim, barreEnergie, barreHygiene, barreWC, barreMoral;
 	@Override
 	public void update(Observable obs, Object o)
 	{
 		String msg = ((String) o).toString();
 		System.out.println("Va chercher l'état ou le besoin " + msg + " sur l'objet Tama et rafrachi l'interface");
+		switch(msg)
+		{
+			case "vie":
+				this.barreVie.setValue(this.tama.getEtatInt("vie"));
+				this.barreVie.setStringPainted(true);
+				System.out.println("salut");
+				break;
+			case "nourriture":
+				this.barreFaim.setValue(this.tama.getEtatInt("nourriture"));
+				this.barreFaim.setStringPainted(true);
+				break;
+			case "moral":
+				//ret = this.moral.getValeur();
+				break;
+			case "toilettes":
+				this.barreEnergie.setValue(this.tama.getEtatInt("toilettes"));
+				this.barreEnergie.setStringPainted(true);
+				break;
+			case "hygiene":
+				this.barreHygiene.setValue(this.tama.getEtatInt("hygiene"));
+				this.barreHygiene.setStringPainted(true);
+				break;
+			case "fatigue":
+				this.barreWC.setValue(this.tama.getEtatInt("fatigue"));
+				this.barreWC.setStringPainted(true);
+				break;
+			case "energie":
+				this.barreMoral.setValue(this.tama.getEtatInt("energie"));
+				this.barreMoral.setStringPainted(true);
+				break;
+			case "sante":
+				//this.sante.getValeur();
+				break;
+			default:
+				break;
+		}
+		super.rafraichir();
 	}
 	@Override
 	public void run()
@@ -32,7 +70,7 @@ public class Principale extends Interface implements Observer, Runnable
 	}
 	public Principale(Tamagotchi tama)
 	{
-		super(800, 300);
+		super(800, 400);
 		this.tama = tama;
 		super.configFenetre("Tamagotchi " + this.tama.getNom());
 		System.out.println("Initialisation de l'interface graphique ...");
@@ -70,11 +108,13 @@ public class Principale extends Interface implements Observer, Runnable
 		JButton btMoral = new JButton("S'amuser avec");
 
 		// Barres de progression dans panBarre (et textes)
-		JProgressBar barreFaim = new JProgressBar(0, 100);
-		JProgressBar barreEnergie = new JProgressBar();
-		JProgressBar barreHygiene = new JProgressBar();
-		JProgressBar barreWC = new JProgressBar();
-		JProgressBar barreMoral = new JProgressBar();
+		this.barreVie = new JProgressBar(0, 100);
+		this.barreFaim = new JProgressBar(0, 100);
+		this.barreEnergie = new JProgressBar();
+		this.barreHygiene = new JProgressBar();
+		this.barreWC = new JProgressBar();
+		this.barreMoral = new JProgressBar();
+		JLabel lbVie = new JLabel("Vie");
 		JLabel lbFaim = new JLabel("Nourriture");
 		JLabel lbEnergie = new JLabel("Energie");
 		JLabel lbHygiene = new JLabel("Hygiène");
@@ -111,16 +151,19 @@ public class Principale extends Interface implements Observer, Runnable
 
 		panBarre.setLayout(new BoxLayout(panBarre, BoxLayout.PAGE_AXIS));
 
+		panBarre.add(lbVie);
+		panBarre.add(this.barreVie);
+
 		panBarre.add(lbFaim);
-		panBarre.add(barreFaim);
+		panBarre.add(this.barreFaim);
 		panBarre.add(lbEnergie);
-		panBarre.add(barreEnergie);
+		panBarre.add(this.barreEnergie);
 		panBarre.add(lbHygiene);
-		panBarre.add(barreHygiene);
+		panBarre.add(this.barreHygiene);
 		panBarre.add(lbWC);
-		panBarre.add(barreWC);
+		panBarre.add(this.barreWC);
 		panBarre.add(lbMoral);
-		panBarre.add(barreMoral);
+		panBarre.add(this.barreMoral);
 		panShortActions.setLayout(new BoxLayout(panShortActions, BoxLayout.PAGE_AXIS));
 		panShortActions.add(btManger);
 		panShortActions.add(btDormir);
@@ -206,16 +249,18 @@ public class Principale extends Interface implements Observer, Runnable
 		super.principal.add(panSelect, c);
 
 		// Initialisation des progress barres
-		barreFaim.setStringPainted(true);
-		barreFaim.setValue(tama.getEtatInt("nourriture"));
-		barreEnergie.setStringPainted(true);
-		barreEnergie.setValue(tama.getEtatInt("energie"));
-		barreWC.setStringPainted(true);
-		barreWC.setValue(tama.getEtatInt("toilettes"));
-		barreHygiene.setStringPainted(true);
-		barreHygiene.setValue(tama.getEtatInt("hygiene"));
-		barreMoral.setStringPainted(true);
-		barreMoral.setValue(tama.getEtatInt("moral"));
+		this.barreVie.setStringPainted(true);
+		this.barreVie.setValue(this.tama.getEtatInt("vie"));
+		this.barreFaim.setStringPainted(true);
+		this.barreFaim.setValue(tama.getEtatInt("nourriture"));
+		this.barreEnergie.setStringPainted(true);
+		this.barreEnergie.setValue(tama.getEtatInt("energie"));
+		this.barreWC.setStringPainted(true);
+		this.barreWC.setValue(tama.getEtatInt("toilettes"));
+		this.barreHygiene.setStringPainted(true);
+		this.barreHygiene.setValue(tama.getEtatInt("hygiene"));
+		this.barreMoral.setStringPainted(true);
+		this.barreMoral.setValue(tama.getEtatInt("moral"));
 
 		// Attachement des évenements sur les boutons
 		btQuitter.addActionListener(this);
@@ -323,7 +368,7 @@ public class Principale extends Interface implements Observer, Runnable
 			{
 				String texte = "UE - Modélisation objet et UML\n";
 				texte += "Projet Conception, modélisation et réalisation d'un tamagotchi\n";
-				texte += "Version : 0.4\n";
+				texte += "Version : 0.4.5\n";
 				texte += "Auteurs :\n";
 				texte += "- Elodie Boloré\n";
 				texte += "- Jérémie Décome\n";
@@ -338,11 +383,6 @@ public class Principale extends Interface implements Observer, Runnable
 		{
 			this.rafraichir();
 		}
-	}
-	private void rafraichir()
-	{
-		System.out.println("Rafraichi l'interface");
-		super.fenetre.revalidate();
 	}
 	public void majEtat(String etat, int valeur)
 	{

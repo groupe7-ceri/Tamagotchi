@@ -42,6 +42,37 @@ public abstract class Vivant extends Tamagotchi
 		super.sauvegarde();
 	}
 	@Override
+	public String getHumeur()
+	{
+		String humeur;
+		int moral = this.moral.getValeur();
+		if((moral >= 80) || (moral <= 100))
+		{
+			humeur = "Très joyeux !";
+		}
+		else if((moral >= 60) || (moral < 79))
+		{
+			humeur = "Ca va";
+		}
+		else if((moral >= 40) || (moral < 59))
+		{
+			humeur = "Ca va à peu près bien";
+		}
+		else if((moral >= 20) || (moral < 39))
+		{
+			humeur = "Ouais bof ...";
+		}
+		else if((moral >= 5) || (moral < 19))
+		{
+			humeur = "Mal";
+		}
+		else
+		{
+			humeur = "Au plus bas ... :( ";
+		}
+		return humeur;
+	}
+	@Override
 	public void run()
 	{
 		super.run();
