@@ -24,39 +24,37 @@ public class Principale extends Interface implements Observer, Runnable
 	public void update(Observable obs, Object o)
 	{
 		String msg = ((String) o).toString();
-		System.out.println("Va chercher l'état ou le besoin " + msg + " sur l'objet Tama et rafrachi l'interface");
 		switch(msg)
 		{
 			case "vie":
 				this.barreVie.setValue(this.tama.getEtatInt("vie"));
 				this.barreVie.setStringPainted(true);
-				System.out.println("salut");
 				break;
 			case "nourriture":
 				this.barreFaim.setValue(this.tama.getEtatInt("nourriture"));
 				this.barreFaim.setStringPainted(true);
 				break;
 			case "moral":
-				//ret = this.moral.getValeur();
+				this.barreMoral.setValue(this.tama.getEtatInt("moral"));
+				this.barreMoral.setStringPainted(true);
 				break;
 			case "toilettes":
-				this.barreEnergie.setValue(this.tama.getEtatInt("toilettes"));
-				this.barreEnergie.setStringPainted(true);
+				this.barreWC.setValue(this.tama.getEtatInt("toilettes"));
+				this.barreWC.setStringPainted(true);
 				break;
 			case "hygiene":
 				this.barreHygiene.setValue(this.tama.getEtatInt("hygiene"));
 				this.barreHygiene.setStringPainted(true);
 				break;
 			case "fatigue":
-				this.barreWC.setValue(this.tama.getEtatInt("fatigue"));
-				this.barreWC.setStringPainted(true);
+				this.barreEnergie.setValue(this.tama.getEtatInt("fatigue"));
+				this.barreEnergie.setStringPainted(true);
 				break;
 			case "energie":
 				this.barreMoral.setValue(this.tama.getEtatInt("energie"));
 				this.barreMoral.setStringPainted(true);
 				break;
 			case "sante":
-				//this.sante.getValeur();
 				break;
 			default:
 				break;
@@ -99,7 +97,6 @@ public class Principale extends Interface implements Observer, Runnable
 		// Boutons (panel raccourci action et boutons divers)
 		JButton btQuitter = new JButton("Quitter");
 		JButton btRefresh = new JButton("Rafraichir");
-		JButton btConfig = new JButton("Config");
 		JButton btAbout = new JButton("A propos");
 		JButton btManger = new JButton("Manger");
 		JButton btDormir = new JButton("Dormir");
@@ -143,17 +140,14 @@ public class Principale extends Interface implements Observer, Runnable
 
 		panBoutons.add(btQuitter);
 		panBoutons.add(btRefresh);
-		panBoutons.add(btConfig);
 
 		panSelect.add(selectActions);
 		panSelect.add(btAction);
 		panSelect.add(btAbout);
 
 		panBarre.setLayout(new BoxLayout(panBarre, BoxLayout.PAGE_AXIS));
-
 		panBarre.add(lbVie);
 		panBarre.add(this.barreVie);
-
 		panBarre.add(lbFaim);
 		panBarre.add(this.barreFaim);
 		panBarre.add(lbEnergie);
@@ -164,12 +158,19 @@ public class Principale extends Interface implements Observer, Runnable
 		panBarre.add(this.barreWC);
 		panBarre.add(lbMoral);
 		panBarre.add(this.barreMoral);
+
+		int espace = 15;
 		panShortActions.setLayout(new BoxLayout(panShortActions, BoxLayout.PAGE_AXIS));
 		panShortActions.add(btManger);
+		panShortActions.add(Box.createRigidArea(new Dimension(0, espace)));
 		panShortActions.add(btDormir);
+		panShortActions.add(Box.createRigidArea(new Dimension(0, espace)));
 		panShortActions.add(btDouche);
+		panShortActions.add(Box.createRigidArea(new Dimension(0, espace)));
 		panShortActions.add(btWC);
+		panShortActions.add(Box.createRigidArea(new Dimension(0, espace)));
 		panShortActions.add(btMoral);
+
 		if(!(tama instanceof Vivant))
 		{
 			btManger.setEnabled(false);
@@ -264,7 +265,6 @@ public class Principale extends Interface implements Observer, Runnable
 
 		// Attachement des évenements sur les boutons
 		btQuitter.addActionListener(this);
-		btConfig.addActionListener(this);
 		btRefresh.addActionListener(this);
 		btAction.addActionListener(this);
 		btAbout.addActionListener(this);
@@ -312,11 +312,6 @@ public class Principale extends Interface implements Observer, Runnable
 				refresh = true;
 			}
 			break;
-			case "Config":
-			{
-				System.out.println("Ouvre le panneau de configuration");
-			}
-			break;
 			case "Manger":
 			{
 				tama.majBesoin("nourriture", 20);
@@ -346,6 +341,7 @@ public class Principale extends Interface implements Observer, Runnable
 				if(this.tama.getEtatBool("maison"))
 				{
 					JOptionPane jop = new JOptionPane();
+					// le tamagotchi doit etre dehors pour s'amuser
 					int option = jop.showConfirmDialog(null, this.tama.getNom() + " est chez lui, voulez vous le faire sortir pour qu'il s'amuse ?", "Jeu", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if(option == JOptionPane.OK_OPTION)
 					{
@@ -381,7 +377,7 @@ public class Principale extends Interface implements Observer, Runnable
 		}
 		if(refresh)
 		{
-			this.rafraichir();
+			super.rafraichir();
 		}
 	}
 	public void majEtat(String etat, int valeur)

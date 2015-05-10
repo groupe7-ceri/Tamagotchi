@@ -13,12 +13,13 @@ public abstract class Vivant extends Tamagotchi
 	{
 		super(file, true);
 		this.nourriture = new Besoin("nourriture", file.getEtatInt(3), 1, true);
+
 		// Calcul du besoin de dormir, qui dépend de la fatigue et de l'énergie
-		this.fatigue = new EtatTama("fatigue",file.getEtatInt(4), 2);
+		this.fatigue = new EtatTama("fatigue", file.getEtatInt(4), 2, true);
 		this.dormir = new Besoin("dormir", this.fatigue.getValeur(), 1, true);
-		this.energie = new EtatTama("energie", file.getEtatInt(5), 2);
+		this.energie = new EtatTama("energie", file.getEtatInt(5), 2, false);
 		this.moral = new Besoin("moral", file.getEtatInt(6), 1, false);
-		this.sante = new EtatTama("sante", file.getEtatInt(7), 2);
+		this.sante = new EtatTama("sante", file.getEtatInt(7), 2, false);		// la santé n'influe pas sur l'interface mais a une influence sur l'humeur du tama
 		this.toilettes = new Besoin("toilettes", file.getEtatInt(8), 1, true);
 		this.hygiene = new Besoin("hygiene", file.getEtatInt(9), 1, true);
 		this.maisonEC = file.getEtatBool(10);
@@ -36,6 +37,7 @@ public abstract class Vivant extends Tamagotchi
 		super.save.majEtat(Etat.MORAL, this.moral.getValeur());
 		super.save.majEtat(Etat.SANTE, this.sante.getValeur());
 		super.save.majEtat(Etat.TOILETTES, this.toilettes.getValeur());
+		super.save.majEtat(Etat.HYGIENE, this.hygiene.getValeur());
 		super.save.majEtat(Etat.MAISON, this.maisonEC);
 		super.save.majEtat(Etat.DORMIR, this.dormirEC);
 		super.save.majEtat(Etat.DEPLACEMENT, this.deplacementEC);
@@ -75,7 +77,63 @@ public abstract class Vivant extends Tamagotchi
 	@Override
 	public void run()
 	{
-		super.run();
+		int cat1 = 0, cat2 = 0, cat3 = 0, cat4 = 0;
+		/*
+			1 top horloge toutes les 300 secondes
+			Catégories :
+				1) se met à jour tous les 300 tops horloge (modification très lente) 
+					- vie du tamagotchi (estimé à 25 heures)
+				2) se met à jour tous les 150 tops horloge (modification lente) - 12,5 heures
+				3) se met à jour tous les 100 tops horloge (modification normale) - 8 heures
+				4) se met à jour tous les 50 tops horloge (modification rapide) - 4 heures
+					- nourriture
+		*/
+		while(true)
+		{
+			try
+			{
+				Thread.sleep(100);	// ceci est un top horloge (par défaut 0,1 sec pour dev sinon 300 secondes)
+				cat1++;
+				cat2++;
+				cat3++;
+				cat4++;
+				if(cat1 == 300)
+				{
+					super.run();
+					cat1 = 0;
+				}
+				if(cat2 == 150)
+				{
+					this.nourriture.vie();
+					this.energie.vie();
+					this.hygiene.vie();
+					super.miseAJour("nourriture");
+					super.miseAJour("energie");
+					super.miseAJour("hygiene");
+					cat2 = 0;
+				}
+				if(cat3 == 100)
+				{
+					this.dormir.vie();
+					this.sante.vie();
+					this.fatigue.vie();
+					super.miseAJour("dormir");
+					super.miseAJour("sante");
+					super.miseAJour("fatigue");
+					cat3 = 0;
+				}
+				if(cat4 == 50)
+				{
+					this.moral.vie();
+					this.toilettes.vie();
+					super.miseAJour("moral");
+					super.miseAJour("toilettes");
+					cat4 = 0;
+				}
+			}
+			catch (InterruptedException ignore)
+			{ }
+		}
 	}
 	@Override
 	public void majBesoin(String besoin, int valeur)

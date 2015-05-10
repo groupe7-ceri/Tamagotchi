@@ -35,7 +35,7 @@ public class Fichier
 	private String dossier = "saves/";
 	private String[] data;		// est l'image du fichier XML au chargement et sert de tampon
 	private String[] etats;
-	private int nb = 14;
+	private int nb = 14;		// nbre d'états et de besoins
 	private Element[] elements;
 	private Element racine;
 	private Element tama;
@@ -98,6 +98,7 @@ public class Fichier
 	{
 		try
 		{
+			long timestamp = System.currentTimeMillis() / 1000;
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.newDocument();
@@ -107,7 +108,7 @@ public class Fichier
 			racine.appendChild(this.tama);
 			if(nouveau)		// ajout des infos dans un nouveau fichier
 			{
-				long timestamp = System.currentTimeMillis() / 1000;
+				//long timestamp = System.currentTimeMillis() / 1000;
 				String[] defaut = new String[] {nomTama, typeTama, "100", "0", "0", "0", "90", "100", "0", "90", "false", "false", "false", Long.toString(timestamp)};
 				this.racine = document.createElement("application");
 				for(int i = 0; i < this.nb; i++)
@@ -120,12 +121,15 @@ public class Fichier
 			}
 			else 			// modification des infos dans le fichier (donc sauvegarde)
 			{
+				this.data[this.nb - 1] = Long.toString(timestamp);
 				for(int i = 0; i < this.nb; i++)
 				{
 					this.elements[i] = document.createElement(this.etats[i]);
 					this.elements[i].appendChild(document.createTextNode(this.data[i]));
 					this.tama.appendChild(this.elements[i]);
 				}
+				// mise à jour du timestamp
+
 			}
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();

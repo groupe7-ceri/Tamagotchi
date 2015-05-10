@@ -9,7 +9,8 @@ public class EtatTama
 	private int valeur;
 	private int pas;
 	private boolean variation;	// permet de définir qu'un état peut fluctuer entre 0 et 100 ou non, tel que la vie
-	public EtatTama(String type, int valeur, int pas)
+	private boolean sens; // montée : true - descente : false
+	public EtatTama(String type, int valeur, int pas, boolean sens)
 	{
 		this.type = type;
 		this.valeur = valeur;
@@ -20,14 +21,19 @@ public class EtatTama
 	}
 	public void vie()
 	{
-		System.out.println("L'état " + this.type + " perd " + this.pas + " points");
-		if((this.valeur > 0) && (this.valeur < 101))
-		{
-			if(this.variation)	// l'état peut fluctuer dans le temps, donc naturellement, il tends vers 100 %
-				this.valeur += this.pas;
-			else				// l'état ne peut pas fluctuer dans le temps, donc naturellement il tends vers 0 %
-				this.valeur -= this.pas;
-		}
+		if(sens)
+			System.out.println("L'état " + this.type + " augmente " + this.pas + " points");
+		else
+			System.out.println("L'état " + this.type + " perds " + this.pas + " points");
+		if(this.sens) 	// l'état tend vers 100 %
+			this.valeur += this.pas;
+		else			// l'état tend naturellement vers 0 %
+			this.valeur -= this.pas;
+
+		if(this.valeur < 0)
+			this.valeur = 0;
+		if(this.valeur > 100)
+			this.valeur = 100;
 	}
 	public int satisfaire(int newVal)
 	{

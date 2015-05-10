@@ -43,7 +43,9 @@ public class App implements Observer
 		System.out.println("Elodie Boloré - Jérémie Décome - Thibaut Miranda");
 		System.out.println("Version : 0.4.5");
 		System.out.println("Démarrage de l'application ...");
+
 		// Détermine si le tamagotchi est nouveau (pas de fichier de sauvegarde) ou non (on propose à l'utilisateur de sélectionner un tamagotchi)
+		// Début temporaire - ce bloc est nécessaire, il est commenté pour le développement
 		String[] dir = new File("saves/").list();
 		if(dir.length > 0)
 		{
@@ -73,7 +75,11 @@ public class App implements Observer
 		if(fenNouveau != null)
 			fenNouveau.deleteObserver(this);
 		if(fenSelection != null)
-			fenSelection.deleteObserver(this);
+			fenSelection.deleteObserver(this);//*/
+		// Fin temporaire
+
+		// Temporaire, charge un tamagotchi pour les essais
+		//this.fichierActuel = new Fichier("Noisette-Chat.xml");
 		String type = fichierActuel.getTypeTama();
 		// Création du tamagotchi en fonction de son type (que les classes finales)
 		Tamagotchi tama = null;

@@ -54,14 +54,16 @@ public class Selection extends Interface
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 0;
+		c.ipady = 20;
 		super.principal.add(panSelecteur, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.5;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 1;
+		c.ipady = 20;
 		super.principal.add(panBoutons, c);
 
 

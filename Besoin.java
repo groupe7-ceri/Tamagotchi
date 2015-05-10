@@ -15,15 +15,25 @@ public class Besoin
 		this.valeur = valeur;
 		this.pas = pas;
 		this.sens = sens;
+		/*System.out.print("Création d'un besoin de type " + this.type + ", valeur de départ " + this.valeur + ", pas de " + this.pas + " - ");
+		if(sens)
+			System.out.println("Sens : augmente");
+		else
+			System.out.println("Sens : descend");//*/
 	}
 	public int satisfaire(int newVal)
 	{
 		if((this.valeur > 0) && (this.valeur < 100))
 		{
-			if(sens) // le besoin tend naturellement vers 100 %, donc il faut en enlever pour le satisfaire
+			if(this.sens) // le besoin tend naturellement vers 100 %, donc il faut en enlever pour le satisfaire
 				this.valeur -= newVal;
 			else	// le besoin tend naturellement vers 0 %, donc il faut en rajouter pour le satisfaire
 				this.valeur += newVal;
+
+			if(this.valeur < 0)
+				this.valeur = 0;
+			if(this.valeur > 100)
+				this.valeur = 100;
 			return this.valeur;
 		}
 		else
@@ -31,13 +41,17 @@ public class Besoin
 	}
 	public void vie()
 	{
-		if((this.valeur > 0) && (this.valeur < 100))
-		{
-			if(sens) // le besoin tend naturellement vers 100 %
-				this.valeur += this.pas;
-			else	// le besoin tend naturellement vers 0 %
-				this.valeur -= this.pas;
-		}
+		//System.out.println("Le besoin " + this.type + " prend " + this.pas + " points");
+		if(this.sens) // le besoin tend naturellement vers 100 %
+			this.valeur += this.pas;
+		else	// le besoin tend naturellement vers 0 %
+			this.valeur -= this.pas;
+
+		if(this.valeur < 0)
+			this.valeur = 0;
+		if(this.valeur > 100)
+			this.valeur = 100;
+		//System.out.println("Nouvelle valeur pour le besoin " + this.type + " => " + this.valeur);
 	}
 	public int getValeur()
 	{

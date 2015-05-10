@@ -26,7 +26,7 @@ public abstract class Tamagotchi extends Observable implements Observer, Runnabl
 		this.save = file;
 		this.nom = file.getNomTama();
 		this.type = file.getTypeTama();
-		this.vie = new EtatTama("vie", file.getEtatInt(2), 1);
+		this.vie = new EtatTama("vie", file.getEtatInt(2), 1, false);
 		this.majFichier = file.getLastMaj();
 		this.majEtats = this.majFichier;
 		this.seDeplace = seDeplace;
@@ -46,36 +46,8 @@ public abstract class Tamagotchi extends Observable implements Observer, Runnabl
 	// implémentation des méthodes communes à tout le monde
 	public void run()
 	{
-		int cat1 = 0, cat2 = 0, cat3 = 0, cat4 = 0;
-		/*
-			1 top horloge toutes les 300 secondes
-			Catégories :
-				1) se met à jour tous les 300 tops horloge (modification très lente) 
-					- vie du tamagotchi (estimé à 25 heures)
-				2) se met à jour tous les 150 tops horloge (modification lente) - 12,5 heures
-				3) se met à jour tous les 100 tops horloge (modification normale) - 8 heures
-				4) se met à jour tous les 50 tops horloge (modification lente) - 4 heures
-					- nourritture
-		*/
-		while(true)
-		{
-			try
-			{
-				Thread.sleep(100);	// ceci est un top horloge (par défaut 3 sec pour dev sinon 300 secondes)
-				cat1++;
-				System.out.println("[Classe mère] Mise à jour des états cat 1 : " + cat1);
-				if(cat1 == 300)
-				{
-					this.miseAJour("vie"); // envoi un message à la fenetre principale
-					this.vie.vie();
-					System.out.println("La vie vaut désormais : " + this.vie.getValeur());
-					cat1 = 0;
-				}
-
-			}
-			catch (InterruptedException ignore)
-			{ }
-		}
+		this.vie.vie();
+		this.miseAJour("vie"); // envoi un message à la fenetre principale
 	}
 	public void miseAJour(String etat)
 	{
