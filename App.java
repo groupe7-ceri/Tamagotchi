@@ -109,7 +109,7 @@ public class App implements Observer
 				System.exit(-2);
 				break;
 		}
-		// mise à jour des états selon le delta de temps passé
+		tama.rafraichissement(); // mise à jour des états selon le delta de temps passé
 		
 		// Démarrage des threads et affichage de l'interface
 		if(tama != null)

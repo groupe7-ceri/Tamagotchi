@@ -40,6 +40,8 @@ public abstract class Tamagotchi extends Observable implements Observer, Runnabl
 	abstract int getEtatInt(String etat);
 	abstract boolean getEtatBool(String etat);
 	abstract String getHumeur();
+	abstract void rafraichissement();
+	//abstract int getIntervalle();
 	// Méthodes privées
 	
 

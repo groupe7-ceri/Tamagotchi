@@ -21,10 +21,10 @@ public class EtatTama
 	}
 	public void vie()
 	{
-		if(sens)
+		/*if(sens)
 			System.out.println("L'état " + this.type + " augmente " + this.pas + " points");
 		else
-			System.out.println("L'état " + this.type + " perds " + this.pas + " points");
+			System.out.println("L'état " + this.type + " perds " + this.pas + " points");//*/
 		if(this.sens) 	// l'état tend vers 100 %
 			this.valeur += this.pas;
 		else			// l'état tend naturellement vers 0 %

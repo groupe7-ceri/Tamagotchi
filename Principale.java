@@ -20,6 +20,7 @@ public class Principale extends Interface implements Observer, Runnable
 	private Choice selectActions;
 	private Tamagotchi tama;
 	private JProgressBar barreVie, barreFaim, barreEnergie, barreHygiene, barreWC, barreMoral;
+	private JLabel humeur, lieu, lastMAJ, nextMAJ;
 	@Override
 	public void update(Observable obs, Object o)
 	{
@@ -59,6 +60,11 @@ public class Principale extends Interface implements Observer, Runnable
 			default:
 				break;
 		}
+		// Rafraichi les JLabel
+		this.humeur.setText("Humeur : " + tama.getHumeur());
+		this.lieu.setText("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
+		this.lastMAJ.setText("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
+		this.nextMAJ.setText("Prochaine MAJ : " + this.timestampToDate(tama.getMaj("") + 60)); // faire un get sur l'intervalle pour le 60 dans le tamagotchi
 		super.rafraichir();
 	}
 	@Override
@@ -89,10 +95,10 @@ public class Principale extends Interface implements Observer, Runnable
 		// Textes résumé haut
 		JLabel nom = new JLabel("Nom : " + tama.getNom());
 		JLabel type = new JLabel("Type : " + tama.getType());
-		JLabel humeur = new JLabel("Humeur : " + tama.getHumeur());
-		JLabel lieu = new JLabel("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
-		JLabel lastMAJ = new JLabel("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
-		JLabel nextMAJ = new JLabel("Prochaine MAJ :");
+		this.humeur = new JLabel("Humeur : " + tama.getHumeur());
+		this.lieu = new JLabel("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
+		this.lastMAJ = new JLabel("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
+		this.nextMAJ = new JLabel("Prochaine MAJ :");
 		
 		// Boutons (panel raccourci action et boutons divers)
 		JButton btQuitter = new JButton("Quitter");
@@ -306,36 +312,55 @@ public class Principale extends Interface implements Observer, Runnable
 				this.tama.sauvegarde();
 				System.exit(0);
 			}
-			break;
+				break;
 			case "Rafraichir":
 			{
 				refresh = true;
 			}
-			break;
+				break;
 			case "Manger":
 			{
-				tama.majBesoin("nourriture", 20);
+				if(!this.tama.getEtatBool("dormir") && this.tama.getEtatBool("maison"))
+					tama.majBesoin("nourriture", 20);
+				else
+					super.afficherMessage(this.tama.getNom() + " est en train de dormir ou n'est pas chez lui, il ne peut pas manger. ", "Erreur", JOptionPane.ERROR_MESSAGE);
 				refresh = true;
 			}
-			break;
+				break;
 			case "Dormir":
 			{
-				tama.majBesoin("dormir", 20);
+				if(!this.tama.getEtatBool("maison"))
+				{
+					JOptionPane jop = new JOptionPane();
+					// le tamagotchi doit etre dehors pour s'amuser
+					int option = jop.showConfirmDialog(null, this.tama.getNom() + " n'est pas chez lui, voulez vous le faire rentrer pour qu'il dorme ?", "Sieste", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if(option == JOptionPane.OK_OPTION)
+					{
+						this.tama.majEtat("maison", true);
+						this.tama.majEtat("dormir", true);
+						super.afficherMessage(this.tama.getNom() + " est en train de dormir. ", "Dodo", JOptionPane.INFORMATION_MESSAGE);
+						refresh = true;
+					}
+					else
+					{
+
+					}
+				}
 				refresh = true;
 			}
-			break;
+				break;
 			case "Douche":
 			{
 				tama.majBesoin("hygiene", 20);
 				refresh = true;
 			}
-			break;
+				break;
 			case "Toilettes":
 			{
 				tama.majBesoin("toilettes", 20);
 				refresh = true;
 			}
-			break;
+				break;
 			case "S'amuser avec":
 			{
 				if(this.tama.getEtatBool("maison"))
@@ -353,13 +378,13 @@ public class Principale extends Interface implements Observer, Runnable
 					}
 				}
 			}
-			break;
+				break;
 			case "Effectuer":
 			{
 				this.tama.effectuerAction(this.selectActions.getSelectedItem());
 				refresh = true;
 			}
-			break;
+				break;
 			case "A propos":
 			{
 				String texte = "UE - Modélisation objet et UML\n";
@@ -371,14 +396,56 @@ public class Principale extends Interface implements Observer, Runnable
 				texte += "- Thibaut Miranda\n";
 				super.afficherMessage(texte, "A propos", JOptionPane.ERROR_MESSAGE);
 			}
-			break;
+				break;
 			default:
 				break;
 		}
 		if(refresh)
 		{
-			super.rafraichir();
+			this.rafraichir(bt.getText());
 		}
+	}
+	//@Override
+	public void rafraichir(String bouton)
+	{
+		//System.out.println("Modif de la couleur des JProgressbar et de l'animation, appel via " + bouton);
+		if(this.tama.getEtatInt("nourriture") > 80)
+			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+		else
+			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+		this.barreFaim.repaint();
+
+		if(this.tama.getEtatInt("energie") > 80)
+			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+		else
+			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+		this.barreEnergie.repaint();
+
+		if(this.tama.getEtatInt("hygiene") > 80)
+			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+		else
+			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+		this.barreHygiene.repaint();
+
+		if(this.tama.getEtatInt("toilettes") > 80)
+			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+		else
+			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+		this.barreWC.repaint();
+
+		if(this.tama.getEtatInt("moral") > 80)
+			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+		else
+			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+		this.barreMoral.repaint();
+
+		// Couleur de la barre de vie
+		if(this.tama.getEtatInt("vie") < 10)
+		{
+			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+			this.barreVie.repaint();
+		}
+		super.rafraichir();
 	}
 	public void majEtat(String etat, int valeur)
 	{

@@ -18,6 +18,11 @@ public abstract class Inerte extends Tamagotchi
 		return "Je suis inerte !";
 	}
 	@Override
+	public void rafraichissement()
+	{
+		System.out.println("rafraichissement des données avant initialisation de l'interface");
+	}
+	@Override
 	public void majBesoin(String besoin, int valeur)
 	{
 		System.out.println("[Sous classe] Satisfait le besoin " + besoin + " avec la valeur " + valeur);

@@ -5,30 +5,52 @@ Description : Classe abstraite des types  */
 
 public abstract class Vivant extends Tamagotchi
 {
-	private Besoin nourriture, dormir, hygiene, toilettes, moral;
-	private EtatTama fatigue, energie, sante;
+	private Fichier fichier;
+	private Besoin nourriture, dormir, hygiene, toilettes;
+	private EtatTama fatigue, energie, sante, moral;
 	protected boolean maisonEC, dormirEC, deplacementEC;	// indique l'état actuel du tamagotchi - en train de dormir ou à la maison, ... - EC pour En Cours
 	private boolean deplacement;
+	private int delai1;		// influence sur la vie
+
+	// A implémenter dans les autres types (Robot et Inerte)
+	private int intervalle;		// intervalle en seconde indiquant un "top horloge"
+	private long nbTop; 	// nbre de top horloge a rattraper
 	public Vivant(Fichier file)
 	{
 		super(file, true);
-		this.nourriture = new Besoin("nourriture", file.getEtatInt(3), 1, true);
+		this.fichier = file;
+		// Besoins
+		this.nourriture = new Besoin("nourriture", this.fichier.getEtatInt(3), 1, true);
+		this.toilettes = new Besoin("toilettes", this.fichier.getEtatInt(8), 1, true);
+		this.hygiene = new Besoin("hygiene", this.fichier.getEtatInt(9), 1, true);
 
-		// Calcul du besoin de dormir, qui dépend de la fatigue et de l'énergie
-		this.fatigue = new EtatTama("fatigue", file.getEtatInt(4), 2, true);
-		this.dormir = new Besoin("dormir", this.fatigue.getValeur(), 1, true);
-		this.energie = new EtatTama("energie", file.getEtatInt(5), 2, false);
-		this.moral = new Besoin("moral", file.getEtatInt(6), 1, false);
-		this.sante = new EtatTama("sante", file.getEtatInt(7), 2, false);		// la santé n'influe pas sur l'interface mais a une influence sur l'humeur du tama
-		this.toilettes = new Besoin("toilettes", file.getEtatInt(8), 1, true);
-		this.hygiene = new Besoin("hygiene", file.getEtatInt(9), 1, true);
-		this.maisonEC = file.getEtatBool(10);
-		this.dormirEC = file.getEtatBool(11);
-		this.deplacementEC = file.getEtatBool(12);
+		// Etats 
+		this.fatigue = new EtatTama("fatigue", this.fichier.getEtatInt(4), 2, true);
+		this.energie = new EtatTama("energie", this.fichier.getEtatInt(5), 2, false);		// fatigue et énergie va déclencher la nécessité de dormir ou non
+		this.moral = new EtatTama("moral", this.fichier.getEtatInt(6), 1, false);
+		this.sante = new EtatTama("sante", this.fichier.getEtatInt(7), 2, false);			// la santé n'influe pas sur l'interface mais a une influence sur l'humeur du tama
+
+		// a virer
+		//this.dormir = new Besoin("dormir", this.fatigue.getValeur(), 1, true);
+		
+		this.maisonEC = this.fichier.getEtatBool(10);
+		this.dormirEC = this.fichier.getEtatBool(11);
+		this.deplacementEC = this.fichier.getEtatBool(12);
+		this.intervalle = 1;
 	}
 	abstract String[] getActions();
 	abstract void effectuerAction(String action);
 
+	public void dormir()
+	{
+		if(this.maisonEC && !this.dormirEC) // il est a la maison, donc il peux aller dormir et si il ne dort pas déjà
+		{
+			if((this.fatigue.getValeur() < 40) && (this.energie.getValeur() < 30))
+			{
+				this.dormirEC = true;
+			}
+		}
+	}
 	public void sauvegarde()
 	{
 		super.save.majEtat(Etat.FAIM, this.nourriture.getValeur());
@@ -74,10 +96,23 @@ public abstract class Vivant extends Tamagotchi
 		}
 		return humeur;
 	}
+	// Méthode rafraichissement, appelée juste avant que le moteur ne soit démarré
+	@Override
+	public void rafraichissement()
+	{
+		long now = System.currentTimeMillis() / 1000;
+		int derniere = this.fichier.getLastMaj();
+		long delta = now - derniere;
+		if(delta > 0)
+			this.nbTop = delta / this.intervalle;	// calcul du nombre de top à rattraper
+		else
+			this.nbTop = 0;
+	}
 	@Override
 	public void run()
 	{
 		int cat1 = 0, cat2 = 0, cat3 = 0, cat4 = 0;
+		int reveil = 0;
 		/*
 			1 top horloge toutes les 300 secondes
 			Catégories :
@@ -88,21 +123,40 @@ public abstract class Vivant extends Tamagotchi
 				4) se met à jour tous les 50 tops horloge (modification rapide) - 4 heures
 					- nourriture
 		*/
+		// Calcul de l'influence
+
 		while(true)
 		{
 			try
 			{
-				Thread.sleep(100);	// ceci est un top horloge (par défaut 0,1 sec pour dev sinon 300 secondes)
-				cat1++;
-				cat2++;
-				cat3++;
-				cat4++;
-				if(cat1 == 300)
+				Thread.sleep(this.intervalle * 1000);	// ceci est un top horloge (par défaut 0,1 sec pour dev sinon 300 secondes)
+				if((this.fatigue.getValeur() > 90) && (this.sante.getValeur() < 10))	// fatigue et santé influe sur la vie
+					this.delai1 = 200;
+				else
+					this.delai1 = 300;
+				if(this.nbTop > 0)
+				{
+					cat1 += this.nbTop;
+					cat2 += this.nbTop;
+					cat3 += this.nbTop;
+					cat4 += this.nbTop;	
+				}
+				else
+				{
+					cat1++;
+					cat2++;
+					cat3++;
+					cat4++;
+				}
+ 				if(this.dormirEC)
+					reveil++;
+				if(cat1 >= delai1)
 				{
 					super.run();
+					System.out.println("MAJ cat1");
 					cat1 = 0;
 				}
-				if(cat2 == 150)
+				if(cat2 >= 150)
 				{
 					this.nourriture.vie();
 					this.energie.vie();
@@ -110,26 +164,42 @@ public abstract class Vivant extends Tamagotchi
 					super.miseAJour("nourriture");
 					super.miseAJour("energie");
 					super.miseAJour("hygiene");
+					System.out.println("MAJ cat2");
 					cat2 = 0;
 				}
-				if(cat3 == 100)
+				if(cat3 >= 100)
 				{
-					this.dormir.vie();
+					//this.dormir.vie();
 					this.sante.vie();
 					this.fatigue.vie();
-					super.miseAJour("dormir");
+					//super.miseAJour("dormir");
 					super.miseAJour("sante");
 					super.miseAJour("fatigue");
+					System.out.println("MAJ cat3");
 					cat3 = 0;
 				}
-				if(cat4 == 50)
+				if(cat4 >= 50)
 				{
 					this.moral.vie();
 					this.toilettes.vie();
 					super.miseAJour("moral");
 					super.miseAJour("toilettes");
+					System.out.println("MAJ cat4");
 					cat4 = 0;
 				}
+				// Controle des états et besoin
+				if((this.dormirEC) && (reveil <= 2))
+				{
+					if((this.energie.getValeur() < 40) && (this.fatigue.getValeur() != 0))
+					{
+						this.energie.satisfaire(10);
+						this.fatigue.satisfaire(10);
+					}
+					else
+						this.dormirEC = false;
+				}
+				if(this.nbTop != 0)
+					this.nbTop = 0;
 			}
 			catch (InterruptedException ignore)
 			{ }
@@ -144,9 +214,9 @@ public abstract class Vivant extends Tamagotchi
 			case "nourriture":
 				this.nourriture.satisfaire(valeur);
 				break;
-			case "dormir":
+			/*case "dormir":
 				this.dormir.satisfaire(valeur);
-				break;
+				break;//*/
 			case "moral":
 				this.moral.satisfaire(valeur);
 				break;
