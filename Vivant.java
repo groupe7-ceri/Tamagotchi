@@ -1,6 +1,6 @@
 /* Fichier Vivant.java
 Crée le samedi 25 avril 2015
-MAJ : samedi 25 avril 2015
+MAJ : lundi 18 mai 2015
 Description : Classe abstraite des types  */
 
 public abstract class Vivant extends Tamagotchi
@@ -50,6 +50,14 @@ public abstract class Vivant extends Tamagotchi
 				this.dormirEC = true;
 			}
 		}
+	}
+	protected void rentrer()
+	{
+		if(!this.maisonEC)
+		{
+			this.maisonEC = true;
+		}
+		super.miseAJour("maisonEC");
 	}
 	public void sauvegarde()
 	{
@@ -136,6 +144,7 @@ public abstract class Vivant extends Tamagotchi
 					this.delai1 = 300;
 				if(this.nbTop > 0)
 				{
+					System.out.println("Nombre de top : " + this.nbTop);
 					cat1 += this.nbTop;
 					cat2 += this.nbTop;
 					cat3 += this.nbTop;

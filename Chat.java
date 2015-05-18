@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public final class Chat extends Vivant
 {
-	private String[] actions = {"Ronronner", "Faire chier le monde", "Faire son curieux"};
+	private String[] actions = {"Rentrer", "Ronronner", "Faire chier le monde", "Faire son curieux"};
 	private String cri = "Miaou";
 	public Chat(Fichier file)
 	{
@@ -28,6 +28,14 @@ public final class Chat extends Vivant
 		if(Arrays.asList(actions).contains(action))
 		{
 			System.out.println("Effectue l'action " + action);
+			switch(action)
+			{
+				case "Rentrer":
+					super.rentrer();
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	@Override

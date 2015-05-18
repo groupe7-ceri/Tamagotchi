@@ -1,6 +1,6 @@
 /* Fichier Principale.java
 Crée le dimanche 12 avril 2015
-MAJ : lundi 20 avril 2015
+MAJ : lundi 18 mai 2015
 Description : Fenetre principale du programme */
 
 import javax.swing.*;
@@ -65,7 +65,7 @@ public class Principale extends Interface implements Observer, Runnable
 		this.lieu.setText("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
 		this.lastMAJ.setText("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
 		this.nextMAJ.setText("Prochaine MAJ : " + this.timestampToDate(tama.getMaj("") + 60)); // faire un get sur l'intervalle pour le 60 dans le tamagotchi
-		super.rafraichir();
+		this.rafraichir();
 	}
 	@Override
 	public void run()
@@ -280,6 +280,7 @@ public class Principale extends Interface implements Observer, Runnable
 		btWC.addActionListener(this);
 		btMoral.addActionListener(this);
 
+		this.rafraichir();
 		// Génération de la fenetre
 		super.fenetre.setContentPane(this.principal);
 		super.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
@@ -402,49 +403,55 @@ public class Principale extends Interface implements Observer, Runnable
 		}
 		if(refresh)
 		{
-			this.rafraichir(bt.getText());
+			this.rafraichir();
 		}
 	}
 	//@Override
-	public void rafraichir(String bouton)
+	public void rafraichir()
 	{
-		//System.out.println("Modif de la couleur des JProgressbar et de l'animation, appel via " + bouton);
+		System.out.println("Modif de la couleur des JProgressbar et de l'animation");
+		this.barreFaim.setStringPainted(true);
 		if(this.tama.getEtatInt("nourriture") > 80)
-			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+			this.barreFaim.setForeground(Color.RED);
 		else
-			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+			this.barreFaim.setForeground(Color.GREEN);
 		this.barreFaim.repaint();
 
+		this.barreEnergie.setStringPainted(true);
 		if(this.tama.getEtatInt("energie") > 80)
-			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+			this.barreEnergie.setForeground(Color.RED);
 		else
-			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+			this.barreEnergie.setForeground(Color.GREEN);
 		this.barreEnergie.repaint();
 
+		this.barreHygiene.setStringPainted(true);
 		if(this.tama.getEtatInt("hygiene") > 80)
-			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+			this.barreHygiene.setForeground(Color.RED);
 		else
-			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+			this.barreHygiene.setForeground(Color.GREEN);
 		this.barreHygiene.repaint();
 
+		this.barreWC.setStringPainted(true);
 		if(this.tama.getEtatInt("toilettes") > 80)
-			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+			this.barreWC.setForeground(Color.RED);
 		else
-			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+			this.barreWC.setForeground(Color.GREEN);
 		this.barreWC.repaint();
 
+		this.barreMoral.setStringPainted(true);
 		if(this.tama.getEtatInt("moral") > 80)
-			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
+			this.barreMoral.setForeground(Color.RED);
 		else
-			UIManager.put("ProgressBar.foreground", Color.BLUE);  //colour of progress bar
+			this.barreMoral.setForeground(Color.GREEN);
 		this.barreMoral.repaint();
 
 		// Couleur de la barre de vie
+		this.barreVie.setStringPainted(true);
 		if(this.tama.getEtatInt("vie") < 10)
-		{
-			UIManager.put("ProgressBar.foreground", Color.RED);  //colour of progress bar
-			this.barreVie.repaint();
-		}
+			this.barreVie.setForeground(Color.RED);
+		else
+			this.barreVie.setForeground(Color.GREEN);
+		this.barreVie.repaint();
 		super.rafraichir();
 	}
 	public void majEtat(String etat, int valeur)
