@@ -19,10 +19,11 @@ public class Besoin
 		if(sens)
 			System.out.println("Sens : augmente");
 		else
-			System.out.println("Sens : descend");//*/
+			System.out.println("Sens : descend");// - tmp */
 	}
 	public int satisfaire(int newVal)
 	{
+		//System.out.println("[Besoin] Satisfaction du besoin" + this.type + " - valeur " + newVal);	// tmp
 		if((this.valeur > 0) && (this.valeur < 100))
 		{
 			if(this.sens) // le besoin tend naturellement vers 100 %, donc il faut en enlever pour le satisfaire

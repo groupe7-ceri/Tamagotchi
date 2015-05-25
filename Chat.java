@@ -25,17 +25,22 @@ public final class Chat extends Vivant
 	@Override
 	public void effectuerAction(String action)
 	{
-		if(Arrays.asList(actions).contains(action))
+		System.out.println("Effectue l'action " + action);
+		switch(action)
 		{
-			System.out.println("Effectue l'action " + action);
-			switch(action)
-			{
-				case "Rentrer":
-					super.rentrer();
-					break;
-				default:
-					break;
-			}
+			case "Rentrer":
+				super.majEtat("maison", true);
+				break;
+			case "sortir":
+				super.majEtat("maison", false);
+				break;
+			case "amuser":
+				super.majBesoin("moral", 20);
+				break;
+			case "Faire chier le monde":
+				super.majBesoin("moral", 10);
+			default:
+				break;
 		}
 	}
 	@Override

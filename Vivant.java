@@ -59,6 +59,12 @@ public abstract class Vivant extends Tamagotchi
 		}
 		super.miseAJour("maisonEC");
 	}
+	protected void sortir()
+	{
+		if(this.maisonEC)
+			this.maisonEC = false;
+		super.miseAJour("maisonEC");
+	}
 	public void sauvegarde()
 	{
 		super.save.majEtat(Etat.FAIM, this.nourriture.getValeur());
@@ -227,7 +233,8 @@ public abstract class Vivant extends Tamagotchi
 				this.dormir.satisfaire(valeur);
 				break;//*/
 			case "moral":
-				this.moral.satisfaire(valeur);
+				int ret = this.moral.satisfaire(valeur);
+				System.out.println("Valeur de ret pour moral : " + ret);
 				break;
 			case "toilettes":
 				this.toilettes.satisfaire(valeur);

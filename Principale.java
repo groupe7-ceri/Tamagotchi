@@ -20,7 +20,7 @@ public class Principale extends Interface implements Observer, Runnable
 	private Choice selectActions;
 	private Tamagotchi tama;
 	private JProgressBar barreVie, barreFaim, barreEnergie, barreHygiene, barreWC, barreMoral;
-	private JLabel humeur, lieu, lastMAJ, nextMAJ;
+	private JLabel humeur, lieu;
 	@Override
 	public void update(Observable obs, Object o)
 	{
@@ -52,8 +52,8 @@ public class Principale extends Interface implements Observer, Runnable
 				this.barreEnergie.setStringPainted(true);
 				break;
 			case "energie":
-				this.barreMoral.setValue(this.tama.getEtatInt("energie"));
-				this.barreMoral.setStringPainted(true);
+				this.barreEnergie.setValue(this.tama.getEtatInt("energie"));
+				this.barreEnergie.setStringPainted(true);
 				break;
 			case "sante":
 				break;
@@ -63,8 +63,6 @@ public class Principale extends Interface implements Observer, Runnable
 		// Rafraichi les JLabel
 		this.humeur.setText("Humeur : " + tama.getHumeur());
 		this.lieu.setText("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
-		this.lastMAJ.setText("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
-		this.nextMAJ.setText("Prochaine MAJ : " + this.timestampToDate(tama.getMaj("") + 60)); // faire un get sur l'intervalle pour le 60 dans le tamagotchi
 		this.rafraichir();
 	}
 	@Override
@@ -84,8 +82,6 @@ public class Principale extends Interface implements Observer, Runnable
 		JPanel panType = new JPanel();
 		JPanel panHumeur = new JPanel();
 		JPanel panLieu = new JPanel();
-		JPanel panLastMAJ = new JPanel();
-		JPanel panNextMAJ = new JPanel();
 		JPanel panImage = new JPanel();
 		JPanel panBarre = new JPanel();
 		JPanel panShortActions = new JPanel();
@@ -97,8 +93,6 @@ public class Principale extends Interface implements Observer, Runnable
 		JLabel type = new JLabel("Type : " + tama.getType());
 		this.humeur = new JLabel("Humeur : " + tama.getHumeur());
 		this.lieu = new JLabel("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
-		this.lastMAJ = new JLabel("Dernière MAJ : " + this.timestampToDate(tama.getMaj("fichier")));
-		this.nextMAJ = new JLabel("Prochaine MAJ :");
 		
 		// Boutons (panel raccourci action et boutons divers)
 		JButton btQuitter = new JButton("Quitter");
@@ -141,8 +135,6 @@ public class Principale extends Interface implements Observer, Runnable
 		panType.add(type);
 		panHumeur.add(humeur);
 		panLieu.add(lieu);
-		panLastMAJ.add(lastMAJ);
-		panNextMAJ.add(nextMAJ);
 
 		panBoutons.add(btQuitter);
 		panBoutons.add(btRefresh);
@@ -217,42 +209,30 @@ public class Principale extends Interface implements Observer, Runnable
 		c.weightx = 0.5;
 		c.gridx = 0;
 		c.gridy = 2;
-		super.principal.add(panLastMAJ, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
-		c.gridx = 1;
-		c.gridy = 2;
-		super.principal.add(panNextMAJ, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.5;
-		c.gridx = 0;
-		c.gridy = 3;
 		super.principal.add(panImage, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;
 		super.principal.add(panBarre, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 2;
-		c.gridy = 3;
+		c.gridy = 2;
 		super.principal.add(panShortActions, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 3;
 		super.principal.add(panBoutons, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 3;
 		super.principal.add(panSelect, c);
 
 		// Initialisation des progress barres
@@ -344,7 +324,7 @@ public class Principale extends Interface implements Observer, Runnable
 					}
 					else
 					{
-
+						this.tama.majEtat("dormir", true);
 					}
 				}
 				refresh = true;
@@ -370,14 +350,10 @@ public class Principale extends Interface implements Observer, Runnable
 					// le tamagotchi doit etre dehors pour s'amuser
 					int option = jop.showConfirmDialog(null, this.tama.getNom() + " est chez lui, voulez vous le faire sortir pour qu'il s'amuse ?", "Jeu", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if(option == JOptionPane.OK_OPTION)
-					{
-						refresh = true;
-					}
-					else
-					{
-
-					}
+						this.tama.effectuerAction("sortir");
 				}
+				this.tama.effectuerAction("amuser");
+				refresh = true;
 			}
 				break;
 			case "Effectuer":
@@ -390,7 +366,7 @@ public class Principale extends Interface implements Observer, Runnable
 			{
 				String texte = "UE - Modélisation objet et UML\n";
 				texte += "Projet Conception, modélisation et réalisation d'un tamagotchi\n";
-				texte += "Version : 0.4.5\n";
+				texte += "Version : 0.5\n";
 				texte += "Auteurs :\n";
 				texte += "- Elodie Boloré\n";
 				texte += "- Jérémie Décome\n";
@@ -399,6 +375,7 @@ public class Principale extends Interface implements Observer, Runnable
 			}
 				break;
 			default:
+				System.out.println("Bouton : " + bt.getText());
 				break;
 		}
 		if(refresh)
@@ -439,7 +416,7 @@ public class Principale extends Interface implements Observer, Runnable
 		this.barreWC.repaint();
 
 		this.barreMoral.setStringPainted(true);
-		if(this.tama.getEtatInt("moral") > 80)
+		if(this.tama.getEtatInt("moral") < 10)
 			this.barreMoral.setForeground(Color.RED);
 		else
 			this.barreMoral.setForeground(Color.GREEN);
@@ -452,6 +429,9 @@ public class Principale extends Interface implements Observer, Runnable
 		else
 			this.barreVie.setForeground(Color.GREEN);
 		this.barreVie.repaint();
+
+		// Mise à jour de l'image
+		
 		super.rafraichir();
 	}
 	public void majEtat(String etat, int valeur)

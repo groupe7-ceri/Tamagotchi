@@ -16,6 +16,7 @@ public class EtatTama
 		this.valeur = valeur;
 		this.pas = pas;
 		this.variation = true;
+		System.out.println("Etat " + this.type + " instancié : " + this.valeur);
 		if(this.type.equals("vie"))
 			this.variation = false;
 	}
@@ -24,7 +25,7 @@ public class EtatTama
 		/*if(sens)
 			System.out.println("L'état " + this.type + " augmente " + this.pas + " points");
 		else
-			System.out.println("L'état " + this.type + " perds " + this.pas + " points");//*/
+			System.out.println("L'état " + this.type + " perds " + this.pas + " points");// - tmp */
 		if(this.sens) 	// l'état tend vers 100 %
 			this.valeur += this.pas;
 		else			// l'état tend naturellement vers 0 %
@@ -37,10 +38,17 @@ public class EtatTama
 	}
 	public int satisfaire(int newVal)
 	{
-		if((this.valeur > 0) && (this.valeur < 100))
+		if((this.valeur >= 0) && (this.valeur < 100))
 		{
-			if(this.variation) // le besoin tend naturellement vers 100 %, donc il faut en enlever pour le satisfaire
-				this.valeur -= newVal;
+			//System.out.println("[EtatTama - 2] Satisfaction de l'état " + this.type + " - valeur " + newVal);	// tmp
+			if(this.variation) // l'état tend naturellement vers 0 %, donc il faut en rajouter pour le satisfaire
+				this.valeur += newVal;
+
+			if(this.valeur < 0)
+				this.valeur = 0;
+			if(this.valeur > 100)
+				this.valeur = 100;
+			System.out.println("Nouvelle valeur de " + this.type + " = " + this.valeur);
 			return this.valeur;
 		}
 		else
