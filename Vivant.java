@@ -150,7 +150,7 @@ public abstract class Vivant extends Tamagotchi
 					this.delai1 = 300;
 				if(this.nbTop > 0)
 				{
-					System.out.println("Nombre de top : " + this.nbTop);
+					//System.out.println("Nombre de top : " + this.nbTop);
 					cat1 += this.nbTop;
 					cat2 += this.nbTop;
 					cat3 += this.nbTop;
@@ -168,7 +168,7 @@ public abstract class Vivant extends Tamagotchi
 				if(cat1 >= delai1)
 				{
 					super.run();
-					System.out.println("MAJ cat1");
+					//System.out.println("MAJ cat1");
 					cat1 = 0;
 				}
 				if(cat2 >= 150)
@@ -179,7 +179,7 @@ public abstract class Vivant extends Tamagotchi
 					super.miseAJour("nourriture");
 					super.miseAJour("energie");
 					super.miseAJour("hygiene");
-					System.out.println("MAJ cat2");
+					//System.out.println("MAJ cat2");
 					cat2 = 0;
 				}
 				if(cat3 >= 100)
@@ -190,7 +190,7 @@ public abstract class Vivant extends Tamagotchi
 					//super.miseAJour("dormir");
 					super.miseAJour("sante");
 					super.miseAJour("fatigue");
-					System.out.println("MAJ cat3");
+					//System.out.println("MAJ cat3");
 					cat3 = 0;
 				}
 				if(cat4 >= 50)
@@ -199,12 +199,13 @@ public abstract class Vivant extends Tamagotchi
 					this.toilettes.vie();
 					super.miseAJour("moral");
 					super.miseAJour("toilettes");
-					System.out.println("MAJ cat4");
+					//System.out.println("MAJ cat4");
 					cat4 = 0;
 				}
 				// Controle des états et besoin
 				if((this.dormirEC) && (reveil <= 2))
 				{
+					System.out.println("Le tamagotchi dort");
 					if((this.energie.getValeur() < 40) && (this.fatigue.getValeur() != 0))
 					{
 						this.energie.satisfaire(10);
@@ -223,7 +224,7 @@ public abstract class Vivant extends Tamagotchi
 	@Override
 	public void majBesoin(String besoin, int valeur)
 	{
-		System.out.println("[Sous classe] Satisfait le besoin " + besoin + " avec la valeur " + valeur);
+		//System.out.println("[Sous classe] Satisfait le besoin " + besoin + " avec la valeur " + valeur);
 		switch(besoin)
 		{
 			case "nourriture":
@@ -233,8 +234,7 @@ public abstract class Vivant extends Tamagotchi
 				this.dormir.satisfaire(valeur);
 				break;//*/
 			case "moral":
-				int ret = this.moral.satisfaire(valeur);
-				System.out.println("Valeur de ret pour moral : " + ret);
+				this.moral.satisfaire(valeur);
 				break;
 			case "toilettes":
 				this.toilettes.satisfaire(valeur);
@@ -246,7 +246,8 @@ public abstract class Vivant extends Tamagotchi
 				this.fatigue.satisfaire(valeur);
 				break;
 			case "energie":
-				this.energie.satisfaire(valeur);
+				int ret = this.energie.satisfaire(valeur);
+				System.out.println("Valeur de ret pour energie : " + ret);
 				break;
 			case "sante":
 				this.sante.satisfaire(valeur);
@@ -260,6 +261,7 @@ public abstract class Vivant extends Tamagotchi
 	@Override
 	public void majEtat(String etat, boolean valeur)
 	{
+		//System.out.println("[Classe Vivant] Met à jour l'état " + etat);
 		switch(etat)
 		{
 			case "maison":
@@ -300,10 +302,10 @@ public abstract class Vivant extends Tamagotchi
 				this.fatigue.getValeur();
 				break;
 			case "energie":
-				this.energie.getValeur();
+				ret = this.energie.getValeur();
 				break;
 			case "sante":
-				this.sante.getValeur();
+				ret = this.sante.getValeur();
 				break;
 			default:
 				ret = -42;
@@ -315,6 +317,7 @@ public abstract class Vivant extends Tamagotchi
 	public boolean getEtatBool(String etat)
 	{
 		boolean ret;
+		//System.out.println("Lit l'état " + etat);
 		switch(etat)
 		{
 			case "maison":

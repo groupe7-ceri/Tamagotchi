@@ -20,11 +20,12 @@ public class Principale extends Interface implements Observer, Runnable
 	private Choice selectActions;
 	private Tamagotchi tama;
 	private JProgressBar barreVie, barreFaim, barreEnergie, barreHygiene, barreWC, barreMoral;
-	private JLabel humeur, lieu;
+	private JLabel humeur, lieu, action;
 	@Override
 	public void update(Observable obs, Object o)
 	{
 		String msg = ((String) o).toString();
+		System.out.println("Update de : " + msg);
 		switch(msg)
 		{
 			case "vie":
@@ -47,11 +48,12 @@ public class Principale extends Interface implements Observer, Runnable
 				this.barreHygiene.setValue(this.tama.getEtatInt("hygiene"));
 				this.barreHygiene.setStringPainted(true);
 				break;
-			case "fatigue":
+			/*case "fatigue":
 				this.barreEnergie.setValue(this.tama.getEtatInt("fatigue"));
 				this.barreEnergie.setStringPainted(true);
-				break;
+				break;//*/
 			case "energie":
+				System.out.println("Etat energie : " + this.tama.getEtatInt("energie"));
 				this.barreEnergie.setValue(this.tama.getEtatInt("energie"));
 				this.barreEnergie.setStringPainted(true);
 				break;
@@ -61,7 +63,9 @@ public class Principale extends Interface implements Observer, Runnable
 				break;
 		}
 		// Rafraichi les JLabel
+		System.out.println("Mise à jour des JLabel");
 		this.humeur.setText("Humeur : " + tama.getHumeur());
+		this.action.setText(this.getActionEC());
 		this.lieu.setText("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
 		this.rafraichir();
 	}
@@ -82,6 +86,7 @@ public class Principale extends Interface implements Observer, Runnable
 		JPanel panType = new JPanel();
 		JPanel panHumeur = new JPanel();
 		JPanel panLieu = new JPanel();
+		JPanel panAction = new JPanel();
 		JPanel panImage = new JPanel();
 		JPanel panBarre = new JPanel();
 		JPanel panShortActions = new JPanel();
@@ -93,6 +98,7 @@ public class Principale extends Interface implements Observer, Runnable
 		JLabel type = new JLabel("Type : " + tama.getType());
 		this.humeur = new JLabel("Humeur : " + tama.getHumeur());
 		this.lieu = new JLabel("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
+		this.action = new JLabel(this.getActionEC());
 		
 		// Boutons (panel raccourci action et boutons divers)
 		JButton btQuitter = new JButton("Quitter");
@@ -127,7 +133,9 @@ public class Principale extends Interface implements Observer, Runnable
 		JButton btAction = new JButton("Effectuer");
 
 		// Image
-		Animation image = new Animation("images/pikachu.png", panImage.getWidth(), panImage.getHeight());
+		//Animation image = new Animation("images/pikachu.png", panImage.getWidth(), panImage.getHeight());
+		SceneGraphique image = new SceneGraphique(this.tama.getType(), panImage.getWidth(), panImage.getHeight());
+		image.selectEtat("normal");
 		panImage = image.getPanel();
 
 		// On rempli la fenetre (et configuration des layouts)
@@ -135,6 +143,7 @@ public class Principale extends Interface implements Observer, Runnable
 		panType.add(type);
 		panHumeur.add(humeur);
 		panLieu.add(lieu);
+		panAction.add(this.action);
 
 		panBoutons.add(btQuitter);
 		panBoutons.add(btRefresh);
@@ -209,45 +218,51 @@ public class Principale extends Interface implements Observer, Runnable
 		c.weightx = 0.5;
 		c.gridx = 0;
 		c.gridy = 2;
+		super.principal.add(panAction, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.5;
+		c.gridx = 0;
+		c.gridy = 3;
 		super.principal.add(panImage, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		super.principal.add(panBarre, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 2;
-		c.gridy = 2;
+		c.gridy = 3;
 		super.principal.add(panShortActions, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		super.principal.add(panBoutons, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		super.principal.add(panSelect, c);
 
 		// Initialisation des progress barres
 		this.barreVie.setStringPainted(true);
 		this.barreVie.setValue(this.tama.getEtatInt("vie"));
 		this.barreFaim.setStringPainted(true);
-		this.barreFaim.setValue(tama.getEtatInt("nourriture"));
+		this.barreFaim.setValue(this.tama.getEtatInt("nourriture"));
 		this.barreEnergie.setStringPainted(true);
-		this.barreEnergie.setValue(tama.getEtatInt("energie"));
+		this.barreEnergie.setValue(this.tama.getEtatInt("energie"));
 		this.barreWC.setStringPainted(true);
-		this.barreWC.setValue(tama.getEtatInt("toilettes"));
+		this.barreWC.setValue(this.tama.getEtatInt("toilettes"));
 		this.barreHygiene.setStringPainted(true);
-		this.barreHygiene.setValue(tama.getEtatInt("hygiene"));
+		this.barreHygiene.setValue(this.tama.getEtatInt("hygiene"));
 		this.barreMoral.setStringPainted(true);
-		this.barreMoral.setValue(tama.getEtatInt("moral"));
+		this.barreMoral.setValue(this.tama.getEtatInt("moral"));
 
 		// Attachement des évenements sur les boutons
 		btQuitter.addActionListener(this);
@@ -265,6 +280,17 @@ public class Principale extends Interface implements Observer, Runnable
 		super.fenetre.setContentPane(this.principal);
 		super.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
 	}
+	private String getActionEC()
+	{
+		String texte = "Action en cours : ";
+		if(this.tama.getEtatBool("dormir"))
+			texte += "Dors";
+		else
+			texte += "Réveillé";
+		if(this.tama.getEtatBool("deplacement") && !this.tama.getEtatBool("maison"))
+			texte += "Se déplace";
+		return texte;
+	}
 	private String afficheLieu(boolean maison)
 	{
 		if(maison)
@@ -273,13 +299,6 @@ public class Principale extends Interface implements Observer, Runnable
 		{
 			return "Dehors";
 		}
-	}
-	private String timestampToDate(long timestamp)
-	{
-		//System.out.println("Timestamp en entrée : " + timestamp);
-		Date date = new Date(timestamp * 1000L);
-		Format format = new SimpleDateFormat("HH:mm:ss - dd/MM/yyyy");
-		return format.format(date);
 	}
 	public void actionPerformed(ActionEvent arg0)
 	{
@@ -386,7 +405,7 @@ public class Principale extends Interface implements Observer, Runnable
 	//@Override
 	public void rafraichir()
 	{
-		System.out.println("Modif de la couleur des JProgressbar et de l'animation");
+		// Mise à jour de la couleur des barres de progression
 		this.barreFaim.setStringPainted(true);
 		if(this.tama.getEtatInt("nourriture") > 80)
 			this.barreFaim.setForeground(Color.RED);
@@ -431,7 +450,6 @@ public class Principale extends Interface implements Observer, Runnable
 		this.barreVie.repaint();
 
 		// Mise à jour de l'image
-		
 		super.rafraichir();
 	}
 	public void majEtat(String etat, int valeur)

@@ -53,6 +53,7 @@ public abstract class Tamagotchi extends Observable implements Observer, Runnabl
 	}
 	public void miseAJour(String etat)
 	{
+		//System.out.println("Mise à jour de l'état " + etat);
 		setChanged();
 		notifyObservers(etat);
 	}
