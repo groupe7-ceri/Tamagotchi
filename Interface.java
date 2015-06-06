@@ -45,10 +45,10 @@ public class Interface extends Observable implements ActionListener, WindowListe
 		this.fenetre.setVisible(true);
 	}
 	// utile ?
-	public boolean getEtat()
+	/*public boolean getEtat()
 	{
 		return this.etat;
-	}
+	}//*/
 	/*@Override
 	public void run()
 	{

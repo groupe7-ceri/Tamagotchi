@@ -8,6 +8,7 @@ import java.util.Arrays;
 public final class Chien extends Vivant
 {
 	private String[] actions = {"Jouer", "Rapporter la baballe"};
+	private String cri = "Wouaf";
 	public Chien(Fichier file)
 	{
 		super(file);

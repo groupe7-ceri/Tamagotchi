@@ -41,7 +41,7 @@ public class App implements Observer
 		Creation fenNouveau = null;
 		System.out.println("Projet Tamagotchi - Modélisation UML");
 		System.out.println("Elodie Boloré - Jérémie Décome - Thibaut Miranda");
-		System.out.println("Version : 0.5");
+		System.out.println("Version : 0.7");
 		System.out.println("Démarrage de l'application ...");
 
 		// Détermine si le tamagotchi est nouveau (pas de fichier de sauvegarde) ou non (on propose à l'utilisateur de sélectionner un tamagotchi)

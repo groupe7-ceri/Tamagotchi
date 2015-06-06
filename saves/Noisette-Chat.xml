@@ -3,17 +3,17 @@
   <tamagotchi>
     <nom>Noisette</nom>
     <type>Chat</type>
-    <vie>41</vie>
-    <faim>2</faim>
-    <fatigue>0</fatigue>
-    <energie>34</energie>
-    <moral>97</moral>
-    <sante>0</sante>
-    <toilettes>21</toilettes>
-    <hygiene>2</hygiene>
+    <vie>88</vie>
+    <faim>19</faim>
+    <fatigue>50</fatigue>
+    <energie>70</energie>
+    <moral>32</moral>
+    <sante>24</sante>
+    <toilettes>48</toilettes>
+    <hygiene>19</hygiene>
     <maison>true</maison>
     <dormir>false</dormir>
     <deplacement>false</deplacement>
-    <lastMAJ>1432554454</lastMAJ>
+    <lastMAJ>1433539707</lastMAJ>
   </tamagotchi>
 </application>

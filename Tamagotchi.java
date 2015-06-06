@@ -16,7 +16,7 @@ public abstract class Tamagotchi extends Observable implements Observer, Runnabl
 	private int majFichier;			// timestamp de mise à jour inscrit dans le fichier	
 	private boolean notifMaj;		// flag permettant de savoir qu'un état a changer
 	private String nom, type;
-	private Timer horloge;
+	//private Timer horloge;
 
 	// Besoins et états commun
 	protected EtatTama vie;
@@ -40,7 +40,7 @@ public abstract class Tamagotchi extends Observable implements Observer, Runnabl
 	abstract int getEtatInt(String etat);
 	abstract boolean getEtatBool(String etat);
 	abstract String getHumeur();
-	abstract void rafraichissement();
+	abstract void rafraichissement();		// je pense qu'elle ne sert à rien !!!
 	//abstract int getIntervalle();
 	// Méthodes privées
 	

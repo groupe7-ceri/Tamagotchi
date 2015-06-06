@@ -1,6 +1,6 @@
 /* Fichier Principale.java
 Crée le dimanche 12 avril 2015
-MAJ : lundi 18 mai 2015
+MAJ : mardi 2 juin 2015
 Description : Fenetre principale du programme */
 
 import javax.swing.*;
@@ -21,16 +21,24 @@ public class Principale extends Interface implements Observer, Runnable
 	private Tamagotchi tama;
 	private JProgressBar barreVie, barreFaim, barreEnergie, barreHygiene, barreWC, barreMoral;
 	private JLabel humeur, lieu, action;
+	private SceneGraphique image;
+	private JPanel panImage;
+	private JButton btDormir;
 	@Override
 	public void update(Observable obs, Object o)
 	{
 		String msg = ((String) o).toString();
-		System.out.println("Update de : " + msg);
+		System.out.println("Update de : " + msg);	// tmp
 		switch(msg)
 		{
 			case "vie":
 				this.barreVie.setValue(this.tama.getEtatInt("vie"));
 				this.barreVie.setStringPainted(true);
+				if(this.tama.getEtatInt("vie") == 0)
+				{
+					super.afficherMessage(this.tama.getNom() + " est mort de décès ! Fin du jeu ! RIP", "Fin !", JOptionPane.ERROR_MESSAGE);
+					System.exit(1);
+				}
 				break;
 			case "nourriture":
 				this.barreFaim.setValue(this.tama.getEtatInt("nourriture"));
@@ -63,7 +71,7 @@ public class Principale extends Interface implements Observer, Runnable
 				break;
 		}
 		// Rafraichi les JLabel
-		System.out.println("Mise à jour des JLabel");
+		//System.out.println("Mise à jour des JLabel");
 		this.humeur.setText("Humeur : " + tama.getHumeur());
 		this.action.setText(this.getActionEC());
 		this.lieu.setText("Lieu : " + this.afficheLieu(tama.getEtatBool("maison")));
@@ -87,7 +95,7 @@ public class Principale extends Interface implements Observer, Runnable
 		JPanel panHumeur = new JPanel();
 		JPanel panLieu = new JPanel();
 		JPanel panAction = new JPanel();
-		JPanel panImage = new JPanel();
+		this.panImage = new JPanel();
 		JPanel panBarre = new JPanel();
 		JPanel panShortActions = new JPanel();
 		JPanel panBoutons = new JPanel();
@@ -105,7 +113,10 @@ public class Principale extends Interface implements Observer, Runnable
 		JButton btRefresh = new JButton("Rafraichir");
 		JButton btAbout = new JButton("A propos");
 		JButton btManger = new JButton("Manger");
-		JButton btDormir = new JButton("Dormir");
+		if(!this.tama.getEtatBool("dormir"))
+			this.btDormir = new JButton("Dormir");
+		else
+			this.btDormir = new JButton("Réveiller");
 		JButton btDouche = new JButton("Douche");
 		JButton btWC = new JButton("Toilettes");
 		JButton btMoral = new JButton("S'amuser avec");
@@ -134,9 +145,9 @@ public class Principale extends Interface implements Observer, Runnable
 
 		// Image
 		//Animation image = new Animation("images/pikachu.png", panImage.getWidth(), panImage.getHeight());
-		SceneGraphique image = new SceneGraphique(this.tama.getType(), panImage.getWidth(), panImage.getHeight());
-		image.selectEtat("normal");
-		panImage = image.getPanel();
+		this.image = new SceneGraphique(this.tama.getType());
+		this.image.selectEtat("normal");
+		this.panImage = this.image.getPanel();
 
 		// On rempli la fenetre (et configuration des layouts)
 		panNom.add(nom);
@@ -178,7 +189,7 @@ public class Principale extends Interface implements Observer, Runnable
 		panShortActions.add(Box.createRigidArea(new Dimension(0, espace)));
 		panShortActions.add(btMoral);
 
-		if(!(tama instanceof Vivant))
+		if(!(tama instanceof Vivant))		// seul le type Vivant peut proposer ce genre d'action
 		{
 			btManger.setEnabled(false);
 			btDormir.setEnabled(false);
@@ -224,7 +235,7 @@ public class Principale extends Interface implements Observer, Runnable
 		c.weightx = 0.5;
 		c.gridx = 0;
 		c.gridy = 3;
-		super.principal.add(panImage, c);
+		super.principal.add(this.panImage, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
@@ -276,6 +287,7 @@ public class Principale extends Interface implements Observer, Runnable
 		btMoral.addActionListener(this);
 
 		this.rafraichir();
+
 		// Génération de la fenetre
 		super.fenetre.setContentPane(this.principal);
 		super.fenetre.setVisible(true);	// obligatoire pour afficher la fenetre
@@ -284,11 +296,15 @@ public class Principale extends Interface implements Observer, Runnable
 	{
 		String texte = "Action en cours : ";
 		if(this.tama.getEtatBool("dormir"))
+		{
+			//System.out.println("getActionEC : dormir true");
 			texte += "Dors";
+		}
 		else
+		{
+			//System.out.println("getActionEC : dormir false");
 			texte += "Réveillé";
-		if(this.tama.getEtatBool("deplacement") && !this.tama.getEtatBool("maison"))
-			texte += "Se déplace";
+		}
 		return texte;
 	}
 	private String afficheLieu(boolean maison)
@@ -296,9 +312,7 @@ public class Principale extends Interface implements Observer, Runnable
 		if(maison)
 			return "Chez lui";
 		else
-		{
 			return "Dehors";
-		}
 	}
 	public void actionPerformed(ActionEvent arg0)
 	{
@@ -308,7 +322,7 @@ public class Principale extends Interface implements Observer, Runnable
 		{
 			case "Quitter":
 			{
-				System.out.println("Sauvegarde, autres actions nécessaire et arret de l'application");
+				System.out.println("Sauvegarde, autres actions nécessaire et arret de l'application");	// tmp
 				this.tama.sauvegarde();
 				System.exit(0);
 			}
@@ -329,24 +343,28 @@ public class Principale extends Interface implements Observer, Runnable
 				break;
 			case "Dormir":
 			{
+				//System.out.println("ok principal");
+
 				if(!this.tama.getEtatBool("maison"))
 				{
 					JOptionPane jop = new JOptionPane();
-					// le tamagotchi doit etre dehors pour s'amuser
 					int option = jop.showConfirmDialog(null, this.tama.getNom() + " n'est pas chez lui, voulez vous le faire rentrer pour qu'il dorme ?", "Sieste", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if(option == JOptionPane.OK_OPTION)
-					{
 						this.tama.majEtat("maison", true);
-						this.tama.majEtat("dormir", true);
-						super.afficherMessage(this.tama.getNom() + " est en train de dormir. ", "Dodo", JOptionPane.INFORMATION_MESSAGE);
-						refresh = true;
-					}
 					else
-					{
-						this.tama.majEtat("dormir", true);
-					}
+						break;
 				}
+				this.tama.majEtat("dormir", true);
+				this.btDormir.setText("Réveiller");
+				super.afficherMessage(this.tama.getNom() + " est en train de dormir. ", "Dodo", JOptionPane.INFORMATION_MESSAGE);
 				refresh = true;
+			}
+				break;
+			case "Réveiller":
+			{
+				super.afficherMessage(this.tama.getNom() + " est reveillé.", "", JOptionPane.INFORMATION_MESSAGE);
+				this.tama.majEtat("dormir", false);
+				this.btDormir.setText("Dormir");
 			}
 				break;
 			case "Douche":
@@ -385,7 +403,7 @@ public class Principale extends Interface implements Observer, Runnable
 			{
 				String texte = "UE - Modélisation objet et UML\n";
 				texte += "Projet Conception, modélisation et réalisation d'un tamagotchi\n";
-				texte += "Version : 0.5\n";
+				texte += "Version : 0.7\n";
 				texte += "Auteurs :\n";
 				texte += "- Elodie Boloré\n";
 				texte += "- Jérémie Décome\n";
@@ -408,13 +426,19 @@ public class Principale extends Interface implements Observer, Runnable
 		// Mise à jour de la couleur des barres de progression
 		this.barreFaim.setStringPainted(true);
 		if(this.tama.getEtatInt("nourriture") > 80)
+		{
 			this.barreFaim.setForeground(Color.RED);
+			this.image.selectEtat("manger");
+		}
 		else
+		{
 			this.barreFaim.setForeground(Color.GREEN);
+			this.image.selectEtat("normal");
+		}
 		this.barreFaim.repaint();
 
 		this.barreEnergie.setStringPainted(true);
-		if(this.tama.getEtatInt("energie") > 80)
+		if(this.tama.getEtatInt("energie") < 10)
 			this.barreEnergie.setForeground(Color.RED);
 		else
 			this.barreEnergie.setForeground(Color.GREEN);
@@ -447,11 +471,17 @@ public class Principale extends Interface implements Observer, Runnable
 			this.barreVie.setForeground(Color.RED);
 		else
 			this.barreVie.setForeground(Color.GREEN);
-		this.barreVie.repaint();
 
-		// Mise à jour de l'image
-		super.rafraichir();
+		if(this.tama.getEtatBool("dormir"))
+			this.btDormir.setText("Réveiller");
+		else
+			this.btDormir.setText("Dormir");
+
+		this.barreVie.repaint();
+		this.panImage = this.image.getPanel();
+		super.rafraichir(); // rafraichissement de l'interface
 	}
+	// Permet d'indiquer à l'objet Tamagotchi qu'un état est mis à jour via l'interface (Observable)
 	public void majEtat(String etat, int valeur)
 	{
 		System.out.println("Met à jour l'indicateur " + etat + " avec la valeur " + valeur + " sur l'interface");

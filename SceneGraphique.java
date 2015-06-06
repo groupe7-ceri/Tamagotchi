@@ -1,6 +1,6 @@
 /* Fichier SceneGraphique.java
 Crée le lundi 25 mai 2015
-MAJ : lundi 25 mai 2015
+MAJ : mardi 2 juin 2015
 Description : Permet de gérer l'affichage de l'animation et du son */
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ public class SceneGraphique
 	private Son[] tabSon = {};
 	private Son cri;
 	private int nbreSprite;
-	public SceneGraphique(String type, int largeur, int longueur)
+	public SceneGraphique(String type)
 	{
 		this.nbreSprite = 4;
 		String[] sprite = new String[this.nbreSprite];
@@ -33,11 +33,10 @@ public class SceneGraphique
 			default:
 				break;
 		}
-		System.out.println("Scene ok type : " + type);
+		//System.out.println("Scene ok type : " + type);
 		// Création des sprites
 		for(int i = 0; i < this.nbreSprite; i++)
 		{
-			System.out.println(i + ") => " + sprite[i]);
 			this.tabImage[i] = new Image(sprite[i]);
 		}
 	}
@@ -61,9 +60,10 @@ public class SceneGraphique
 			default:
 				break;
 		}
-		System.out.println("Select etat : " + select + " etat : " + etat);
+		//System.out.println("Select etat : " + select + " etat : " + etat);
 		this.panel = this.tabImage[select].getPanel();
 	}
+	// Retourne le contenant (utilisé pour mettre à jour l'image)
 	public JPanel getPanel()
 	{
 		return this.panel;
@@ -72,4 +72,10 @@ public class SceneGraphique
 	{
 
 	}
+	/*public static void main(String[] arg)
+	{
+		System.out.println("Test de la classe SceneGraphique");
+		SceneGraphique image = new SceneGraphique("Chat");
+		image.selectEtat("dormir");
+	} //*/
 }

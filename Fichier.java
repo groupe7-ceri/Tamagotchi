@@ -187,10 +187,10 @@ public class Fichier
 	}
 	
 	// temporaire
-	public void afficheElement(int pos)
+	/*public void afficheElement(int pos)
 	{
 		System.out.println(pos + ") Etat " + this.etats[pos] + " : " + this.data[pos]);
-	}
+	}//*/
 	public void sauvegarde()
 	{
 		for(int i = 0; i < this.nb; i++)

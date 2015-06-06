@@ -1,6 +1,6 @@
 /* Fichier Image.java
 Crée le lundi 25 mai 2015
-MAJ : lundi 25 mai 2015
+MAJ : mardi 2 juin 2015
 Description :  */
 
 import javax.swing.*;
@@ -19,10 +19,6 @@ public class Image extends JFrame
 		this.image = new JLabel(this.icone);
 		this.panel.add(image);
 		this.panel.repaint();
-	}
-	public JPanel changerImage(String image)
-	{
-		return null;
 	}
 	public JPanel getPanel()
 	{
