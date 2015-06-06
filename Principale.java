@@ -28,7 +28,7 @@ public class Principale extends Interface implements Observer, Runnable
 	public void update(Observable obs, Object o)
 	{
 		String msg = ((String) o).toString();
-		System.out.println("Update de : " + msg);	// tmp
+		//System.out.println("Update de : " + msg);	// tmp
 		switch(msg)
 		{
 			case "vie":
@@ -428,6 +428,7 @@ public class Principale extends Interface implements Observer, Runnable
 		if(this.tama.getEtatInt("nourriture") > 80)
 		{
 			this.barreFaim.setForeground(Color.RED);
+			System.out.println("ici pour nourriture");
 			this.image.selectEtat("manger");
 		}
 		else
@@ -439,13 +440,19 @@ public class Principale extends Interface implements Observer, Runnable
 
 		this.barreEnergie.setStringPainted(true);
 		if(this.tama.getEtatInt("energie") < 10)
+		{
 			this.barreEnergie.setForeground(Color.RED);
+			this.image.selectEtat("dormir");
+		}
 		else
+		{
 			this.barreEnergie.setForeground(Color.GREEN);
+			this.image.selectEtat("normal");
+		}
 		this.barreEnergie.repaint();
 
 		this.barreHygiene.setStringPainted(true);
-		if(this.tama.getEtatInt("hygiene") > 80)
+		if(this.tama.getEtatInt("hygiene") < 10)
 			this.barreHygiene.setForeground(Color.RED);
 		else
 			this.barreHygiene.setForeground(Color.GREEN);
@@ -479,6 +486,7 @@ public class Principale extends Interface implements Observer, Runnable
 
 		this.barreVie.repaint();
 		this.panImage = this.image.getPanel();
+		this.panImage.revalidate();
 		super.rafraichir(); // rafraichissement de l'interface
 	}
 	// Permet d'indiquer à l'objet Tamagotchi qu'un état est mis à jour via l'interface (Observable)

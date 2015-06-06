@@ -10,11 +10,11 @@ public abstract class Vivant extends Tamagotchi
 	private EtatTama fatigue, energie, sante, moral;
 	protected boolean maisonEC, dormirEC, deplacementEC;	// indique l'état actuel du tamagotchi - en train de dormir ou à la maison, ... - EC pour En Cours
 	private boolean deplacement;
-	private int delai1;		// influence sur la vie
+	private int delai1;			// influence sur la vie
 
 	// A implémenter dans les autres types (Robot et Inerte)
 	private int intervalle;		// intervalle en seconde indiquant un "top horloge"
-	private long nbTop; 	// nbre de top horloge a rattraper
+	private long nbTop; 		// nbre de top horloge a rattraper
 	public Vivant(Fichier file)
 	{
 		super(file, true);
@@ -22,7 +22,7 @@ public abstract class Vivant extends Tamagotchi
 		// Besoins
 		this.nourriture = new Besoin("nourriture", this.fichier.getEtatInt(3), 1, true);
 		this.toilettes = new Besoin("toilettes", this.fichier.getEtatInt(8), 1, true);
-		this.hygiene = new Besoin("hygiene", this.fichier.getEtatInt(9), 1, true);
+		this.hygiene = new Besoin("hygiene", this.fichier.getEtatInt(9), 1, false);
 
 		// Etats 
 		this.fatigue = new EtatTama("fatigue", this.fichier.getEtatInt(4), 2, true);
@@ -204,10 +204,10 @@ public abstract class Vivant extends Tamagotchi
 						reveil++;
 					else
 						reveil = 0;
-					System.out.println("fatigue => dormir : " + this.dormirEC + " - réveil : " + reveil);
+					//System.out.println("fatigue => dormir : " + this.dormirEC + " - réveil : " + reveil);
 					if((this.dormirEC) && (reveil <= 4))
 					{
-						System.out.println("Le tamagotchi dort dormir - energie : " + this.energie.getValeur() + " - fatigue : " + this.fatigue.getValeur());
+						//System.out.println("Le tamagotchi dort dormir - energie : " + this.energie.getValeur() + " - fatigue : " + this.fatigue.getValeur());
 						if((this.energie.getValeur() < 40) || (this.fatigue.getValeur()  > 50))
 						{
 							this.energie.satisfaire(10);
@@ -223,14 +223,17 @@ public abstract class Vivant extends Tamagotchi
 					{
 						this.dormirEC = false;
 					}
+					//System.out.println("WC : " + this.toilettes.getValeur() +  " - Hygiène : " + this.hygiene.getValeur());
 					if((this.toilettes.getValeur() >= 95) || (this.hygiene.getValeur() <= 2))	// l'hygiène a une influence sur la santé du tama
 					{
 						this.sante.vie();
 					}
+					else
+						this.sante.satisfaire(3); // l'hygiene et les toilettes sont satisfait donc n'ont plus d'influence sur la santé
 					// si certains états ou besoins arrivent à 100 % ou 0 %, la vie perd 3 points de vie
 					if((this.nourriture.getValeur() >= 100) || (this.toilettes.getValeur() >= 100) || (this.fatigue.getValeur() >= 100) || (this.sante.getValeur() <= 0))
 					{
-						System.out.println("Nourriture : " + this.nourriture.getValeur() + " - WC : " + this.toilettes.getValeur() + " - Fatigue : " + this.fatigue.getValeur() + " - Santé : " + this.sante.getValeur());
+						//System.out.println("Nourriture : " + this.nourriture.getValeur() + " - WC : " + this.toilettes.getValeur() + " - Fatigue : " + this.fatigue.getValeur() + " - Santé : " + this.sante.getValeur());
 						for(int i = 0; i < 3; i++)
 						{
 							super.run();
@@ -269,14 +272,14 @@ public abstract class Vivant extends Tamagotchi
 				this.toilettes.satisfaire(valeur);
 				break;
 			case "hygiene":
-				this.hygiene.satisfaire(valeur);
+				/*int ret = */this.hygiene.satisfaire(valeur);
+				//System.out.println("Valeur de ret pour hygiene : " + ret);
 				break;
 			case "fatigue":
 				this.fatigue.satisfaire(valeur);
 				break;
 			case "energie":
-				int ret = this.energie.satisfaire(valeur);
-				System.out.println("Valeur de ret pour energie : " + ret);
+				this.energie.satisfaire(valeur);
 				break;
 			case "sante":
 				this.sante.satisfaire(valeur);

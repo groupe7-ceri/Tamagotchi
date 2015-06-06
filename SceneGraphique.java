@@ -62,6 +62,9 @@ public class SceneGraphique
 		}
 		//System.out.println("Select etat : " + select + " etat : " + etat);
 		this.panel = this.tabImage[select].getPanel();
+		this.panel.revalidate();
+		this.panel.repaint();
+		//System.out.println("Panel sélectionné pour l'état " + etat + " : " + this.panel);
 	}
 	// Retourne le contenant (utilisé pour mettre à jour l'image)
 	public JPanel getPanel()
@@ -70,12 +73,14 @@ public class SceneGraphique
 	}
 	public void jouerCri()
 	{
-
+		// non implémenté car pas de temps
 	}
-	/*public static void main(String[] arg)
+	public static void main(String[] arg)
 	{
 		System.out.println("Test de la classe SceneGraphique");
 		SceneGraphique image = new SceneGraphique("Chat");
+		image.selectEtat("normal");
+		//System.out.println("Ret de image " + image.getPanel());
 		image.selectEtat("dormir");
 	} //*/
 }

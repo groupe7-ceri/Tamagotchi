@@ -15,16 +15,12 @@ public class Besoin
 		this.valeur = valeur;
 		this.pas = pas;
 		this.sens = sens;
-		/*System.out.print("Création d'un besoin de type " + this.type + ", valeur de départ " + this.valeur + ", pas de " + this.pas + " - ");
-		if(sens)
-			System.out.println("Sens : augmente");
-		else
-			System.out.println("Sens : descend");// - tmp */
+		//System.out.println("Création d'un besoin de type " + this.type + ", valeur de départ " + this.valeur + ", pas de " + this.pas + " - sens : " + this.sens); // tmp
 	}
 	public int satisfaire(int newVal)
 	{
-		//System.out.println("[Besoin] Satisfaction du besoin" + this.type + " - valeur " + newVal);	// tmp
-		if((this.valeur > 0) && (this.valeur < 100))
+		//System.out.println("[Besoin] Satisfaction du besoin " + this.type + " - valeur " + newVal);	// tmp
+		if((this.valeur >= 0) && (this.valeur <= 100))
 		{
 			if(this.sens) // le besoin tend naturellement vers 100 %, donc il faut en enlever pour le satisfaire
 				this.valeur -= newVal;

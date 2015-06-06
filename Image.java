@@ -11,10 +11,11 @@ public class Image extends JFrame
 	private JPanel panel;
 	private ImageIcon icone;
 	private JLabel image;
+	private String fichier;
 	public Image(String fichier)
 	{
-		System.out.println("Fichier : " + fichier);
-		this.icone = new ImageIcon(fichier);
+		this.fichier = fichier;
+		this.icone = new ImageIcon(this.fichier);
 		this.panel = new JPanel();
 		this.image = new JLabel(this.icone);
 		this.panel.add(image);
@@ -22,6 +23,7 @@ public class Image extends JFrame
 	}
 	public JPanel getPanel()
 	{
+		//System.out.println("[getPanel - Image] panel pour l'image " + this.fichier + " => " + this.panel);
 		return this.panel;
 	}
 }

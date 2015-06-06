@@ -41,8 +41,10 @@ public class Interface extends Observable implements ActionListener, WindowListe
 	}
 	protected void rafraichir()
 	{
+		System.out.println("refresh général");
 		this.fenetre.setVisible(false);
 		this.fenetre.setVisible(true);
+		this.principal.revalidate();
 	}
 	// utile ?
 	/*public boolean getEtat()
